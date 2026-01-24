@@ -1,37 +1,86 @@
-Spatial Audio Explorer
-Interaktywne środowisko przeglądarkowe do symulacji i badania akustyki przestrzennej. Narzędzie wykorzystuje standard Web Audio API oraz modelowanie HRTF (Head-Related Transfer Function) do precyzyjnej lokacji źródeł dźwięku w przestrzeni dwuwymiarowej z odwzorowaniem sferycznym.
-Kluczowe funkcjonalności
-Renderowanie przestrzenne: Pełna implementacja węzłów PannerNode oraz AudioListener, umożliwiająca analizę zmian natężenia i barwy dźwięku w zależności od pozycji () oraz rotacji słuchacza.
-Architektura dwutrybowa:
-Tryb Projektowy (Edit): Precyzyjne rozmieszczanie źródeł sygnału w przestrzeni laboratoryjnej.
-Tryb Eksploracji (Explore): Interaktywna weryfikacja sceny dźwiękowej z perspektywy użytkownika końcowego.
-Monitorowanie parametrów: Podgląd współrzędnych geograficznych oraz kąta orientacji w czasie rzeczywistym (HUD).
-Analiza dystansu: Wizualizacja tłumienia sygnału zgodnie z modelem fizycznym inverse distance.
-Zastosowanie
-Projekt służy jako platforma do:
-Prototypowania systemów audio w środowiskach wirtualnych.
-Badań nad percepcją dźwięku przestrzennego.
-Tworzenia dynamicznych opraw akustycznych dla gier i symulacji RPG.
-Edukacji w zakresie inżynierii dźwięku i akustyki cyfrowej.
-Specyfikacja sterowania
-| Interakcja | Funkcja |
-| W, A, S, D | Translacja pozycji słuchacza w osiach X/Y |
-| Q, E | Manipulacja rotacją (azymut słuchacza) |
-| LPM (Mapa) | Definiowanie wektora ruchu do celu |
-| Przeciąganie (Explore) | Zmiana orientacji wektora patrzenia |
-| Przeciąganie (Edit) | Relokacja wybranych źródeł sygnału |
-| Spacja | Kontrola stanu odtwarzania (Play/Pause) |
-Architektura techniczna
-Aplikacja jest w pełni autonomiczna i nie wymaga zewnętrznych zależności (Zero-dependency):
-Web Audio API: Silnik przetwarzania sygnałów i renderowania 3D.
-HTML5 Canvas: System wizualizacji wektorowej środowiska.
-Vanilla JavaScript (ES6+): Zarządzanie stanem i obsługa zdarzeń.
-Uruchomienie projektu
+#🎧 3D Audio Explorer
+
+3D Audio Explorer to interaktywne narzędzie webowe do eksploracji dźwięku przestrzennego w czasie rzeczywistym. Aplikacja wykorzystuje zaawansowane algorytmy Web Audio API (HRTF), aby symulować sposób, w jaki ludzkie ucho odbiera dźwięki z różnych kierunków i odległości.
+
+![Technologia-HTML5/JS-blue)
+
+##🚀 Główne Funkcje
+
+Spatial Audio (Dźwięk Przestrzenny): Pełna symulacja 3D z uwzględnieniem pozycji ($X, Y, Z$) oraz orientacji słuchacza.
+
+Dwa Tryby Pracy:
+
+###✏️ Tryb Edycji: Dowolnie rozmieszczaj źródła dźwięku na mapie za pomocą myszki.
+
+###🎮 Tryb Eksploracji: Wciel się w rolę słuchacza i poruszaj się po stworzonym świecie, doświadczając imersyjnych przejść dźwiękowych.
+
+Dynamiczna Minimapa: Podgląd całego obszaru w czasie rzeczywistym z wskaźnikiem pozycji i kierunku patrzenia.
+
+Drag & Drop: Błyskawiczne dodawanie własnych plików audio (.mp3, .wav, .ogg) bezpośrednio do przeglądarki.
+
+Wizualizacja Zasięgu: Graficzne przedstawienie propagacji dźwięku dla aktywnych źródeł.
+
+##🛠 Zastosowania
+
+Aplikacja idealnie sprawdzi się jako:
+
+Prototypowanie audio w grach: Szybkie sprawdzanie, jak różne odgłosy otoczenia współgrają ze sobą w przestrzeni.
+
+Wsparcie sesji RPG: Tworzenie dynamicznych teł dźwiękowych (np. karczma, las), gdzie pozycja graczy wpływa na to, co słyszą.
+
+Narzędzie relaksacyjne/ASMR: Komponowanie własnych pejzaży dźwiękowych (soundscapes) do pracy lub medytacji.
+
+Edukacja: Demonstracja zjawisk akustycznych, takich jak spadek głośności wraz z dystansem czy panorama stereo.
+
+##⌨️ Sterowanie
+
+Klawisz / Akcja
+
+Funkcja
+
+W, A, S, D
+
+Poruszanie się słuchaczem
+
+Q, E
+
+Obracanie głowy (zmiana panoramy)
+
+Kliknięcie na mapie
+
+Automatyczne przejście do wskazanego punktu
+
+Przeciąganie (Explore)
+
+Swobodne rozglądanie się
+
+Przeciąganie (Edit)
+
+Zmiana pozycji źródła dźwięku
+
+Spacja
+
+Play / Pauza wybranego źródła
+
+##🏗 Technologia
+
+Aplikacja została zbudowana przy użyciu czystych technologii webowych, co gwarantuje szybkość działania i brak konieczności instalowania dodatkowych bibliotek:
+
+Web Audio API: Obsługa pannerów 3D i listenera.
+
+HTML5 Canvas: Wydajne renderowanie środowiska graficznego 2D.
+
+Vanilla JavaScript: Logika aplikacji i zarządzanie stanem bez zbędnego narzutu.
+
+##📦 Instalacja i Uruchomienie
+
 Sklonuj repozytorium:
-git clone [https://github.com/spatial-audio-lab/audio-explorer.git](https://github.com/spatial-audio-lab/audio-explorer.git)
+
+git clone [https://github.com/twój-username/audio-explorer.git](https://github.com/twój-username/audio-explorer.git)
 
 
+Otwórz plik index.html w dowolnej nowoczesnej przeglądarce (Chrome, Firefox, Edge).
 
-Otwórz plik index.html w środowisku zgodnym z Web Audio API (Chrome 60+, Firefox 55+, Edge 79+).
-Uwaga: Ze względów bezpieczeństwa (Autoplay Policy), interakcja ze stroną jest wymagana do zainicjowania kontekstu audio.
-Projekt rozwijany w ramach Spatial Audio Lab.
+Ważne: Przeglądarki blokują autoodtwarzanie dźwięku. Kliknij gdziekolwiek na stronie po jej załadowaniu, aby aktywować silnik audio.
+
+Stworzone z pasji do dźwięku i interaktywnych mediów.
