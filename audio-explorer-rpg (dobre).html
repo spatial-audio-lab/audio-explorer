@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>3D Audio Explorer</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --surface-2: #21262d;
+            --border: #30363d;
+            --primary: #58a6ff;
+            --primary-dim: rgba(88, 166, 255, 0.15);
+            --accent: #f78166;
+            --success: #3fb950;
+            --text: #e6edf3;
+            --text-dim: #8b949e;
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app {
+            display: flex;
+            height: 100vh;
+        }
+
+        .main-view {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        @media (max-width: 800px) {
+            .sidebar { display: none; }
+        }
+
+        /* Header */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 20px;
+            background: linear-gradient(to bottom, rgba(13,17,23,0.95), transparent);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .header > * { pointer-events: auto; }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .logo-text h1 { font-size: 1.1rem; font-weight: 600; }
+        .logo-text p { font-size: 0.75rem; color: var(--text-dim); }
+
+        .mode-switch {
+            display: flex;
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .mode-btn {
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.15s;
+        }
+
+        .mode-btn.active { background: var(--primary); color: #fff; }
+        .mode-btn:hover:not(.active) { color: var(--text); }
+
+        /* Canvas */
+        #mainCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .app.edit-mode #mainCanvas { cursor: crosshair; }
+        .app.explore-mode #mainCanvas { cursor: grab; }
+        .app.explore-mode #mainCanvas:active { cursor: grabbing; }
+
+        /* Minimap */
+        .minimap {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 160px;
+            height: 160px;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            opacity: 0.9;
+            cursor: pointer;
+        }
+
+        .minimap:hover { opacity: 1; border-color: var(--primary); }
+
+        #minimapCanvas { width: 100%; height: 100%; }
+
+        .minimap-label {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* HUD */
+        .hud {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            background: rgba(22, 27, 34, 0.9);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 12px;
+            backdrop-filter: blur(8px);
+        }
+
+        .hud-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 4px;
+        }
+
+        .hud-row:last-child { margin-bottom: 0; }
+        .hud-label { color: var(--text-dim); }
+        .hud-value { color: var(--primary); font-weight: 500; }
+
+        /* Compass */
+        .compass {
+            position: absolute;
+            top: 80px;
+            right: 320px;
+            width: 70px;
+            height: 70px;
+            background: rgba(22, 27, 34, 0.9);
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+
+        @media (max-width: 800px) { .compass { right: 20px; } }
+
+        .compass-needle {
+            width: 4px;
+            height: 30px;
+            background: linear-gradient(to bottom, var(--accent) 50%, var(--text-dim) 50%);
+            border-radius: 2px;
+            transform-origin: center center;
+            transition: transform 0.15s ease-out;
+        }
+
+        .compass-n {
+            position: absolute;
+            top: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* Control hints */
+        .control-hints {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 16px;
+            background: rgba(22, 27, 34, 0.9);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .hint {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        .hint-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        /* Target indicator */
+        .target-indicator {
+            position: absolute;
+            pointer-events: none;
+            display: none;
+        }
+
+        .target-indicator.visible { display: block; }
+
+        .target-marker {
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--accent);
+            border-radius: 50%;
+            animation: targetPulse 1s ease-out infinite;
+        }
+
+        @keyframes targetPulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        /* Sidebar styles */
+        .sidebar-section {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-dim);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: #79b8ff; }
+        .btn-secondary { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: var(--border); }
+        .btn-success { background: var(--success); color: #fff; }
+        .btn-sm { padding: 6px 10px; font-size: 12px; }
+        .btn-group { display: flex; gap: 6px; }
+        .btn-group .btn { flex: 1; }
+
+        .file-drop {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-drop:hover, .file-drop.dragover {
+            border-color: var(--primary);
+            background: var(--primary-dim);
+        }
+
+        .file-drop-icon { font-size: 28px; margin-bottom: 6px; }
+        .file-drop-text { font-size: 12px; color: var(--text-dim); }
+
+        #fileInput { display: none; }
+
+        .sources-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 16px 16px;
+        }
+
+        .source-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: var(--surface-2);
+            border-radius: 8px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.15s;
+        }
+
+        .source-item:hover { background: var(--border); }
+        .source-item.selected { border-color: var(--primary); }
+        .source-item.playing { border-color: var(--success); }
+
+        .source-number {
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .source-info { flex: 1; min-width: 0; }
+        .source-name { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .source-meta { font-size: 10px; color: var(--text-dim); }
+
+        .source-btn {
+            width: 26px;
+            height: 26px;
+            border: none;
+            border-radius: 6px;
+            background: var(--surface);
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .source-btn:hover { background: var(--border); color: var(--text); }
+        .source-btn.playing { background: var(--success); color: #fff; }
+        .source-btn.delete:hover { background: var(--accent); color: #fff; }
+
+        .player-controls {
+            padding: 16px;
+            background: var(--surface-2);
+        }
+
+        .now-playing { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; }
+        .now-playing-name { font-size: 13px; font-weight: 500; margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .volume-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .volume-row input[type="range"] {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--surface);
+            border-radius: 3px;
+        }
+
+        .volume-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .volume-value { font-size: 11px; color: var(--text-dim); width: 35px; text-align: right; }
+
+        .empty-state { text-align: center; padding: 30px 20px; color: var(--text-dim); }
+        .empty-state-icon { font-size: 36px; margin-bottom: 10px; opacity: 0.5; }
+
+        .hints-sidebar {
+            padding: 12px 16px;
+            font-size: 11px;
+            color: var(--text-dim);
+            line-height: 1.8;
+            border-top: 1px solid var(--border);
+        }
+
+        .hints-sidebar kbd {
+            display: inline-block;
+            padding: 2px 6px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 10px;
+        }
+
+        /* Hide hints in edit mode */
+        .app.edit-mode .control-hints { display: none; }
+    </style>
+</head>
+<body>
+    <div class="app edit-mode" id="app">
+        <div class="main-view">
+            <canvas id="mainCanvas"></canvas>
+
+            <div class="header">
+                <div class="logo">
+                    <div class="logo-icon">🎧</div>
+                    <div class="logo-text">
+                        <h1>3D Audio Explorer</h1>
+                        <p>Click to move, drag to look</p>
+                    </div>
+                </div>
+                <div class="mode-switch">
+                    <button class="mode-btn active" data-mode="edit">✏️ Edycja</button>
+                    <button class="mode-btn" data-mode="explore">🎮 Eksploracja</button>
+                </div>
+            </div>
+
+            <div class="hud" id="hud">
+                <div class="hud-row">
+                    <span class="hud-label">POS</span>
+                    <span class="hud-value" id="hudPos">0.0, 0.0</span>
+                </div>
+                <div class="hud-row">
+                    <span class="hud-label">ROT</span>
+                    <span class="hud-value" id="hudRot">0°</span>
+                </div>
+            </div>
+
+            <div class="compass">
+                <span class="compass-n">N</span>
+                <div class="compass-needle" id="compassNeedle"></div>
+            </div>
+
+            <div class="minimap">
+                <span class="minimap-label">Mapa</span>
+                <canvas id="minimapCanvas"></canvas>
+            </div>
+
+            <div class="control-hints">
+                <div class="hint">
+                    <div class="hint-icon">🖱️</div>
+                    <span>Kliknij = idź</span>
+                </div>
+                <div class="hint">
+                    <div class="hint-icon">👆</div>
+                    <span>Przeciągnij = obróć</span>
+                </div>
+                <div class="hint">
+                    <div class="hint-icon">⌨️</div>
+                    <span>WASD = ruch</span>
+                </div>
+            </div>
+
+            <div class="target-indicator" id="targetIndicator">
+                <div class="target-marker"></div>
+            </div>
+        </div>
+
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <span class="section-title">Dodaj dźwięki</span>
+                </div>
+                <div class="file-drop" id="fileDrop">
+                    <div class="file-drop-icon">📂</div>
+                    <div class="file-drop-text">Kliknij lub upuść pliki</div>
+                </div>
+                <input type="file" id="fileInput" accept="audio/*" multiple>
+            </div>
+
+            <div class="sidebar-section" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; padding-bottom: 0;">
+                <div class="section-header">
+                    <span class="section-title">Źródła</span>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-sm" id="playAllBtn">▶ All</button>
+                        <button class="btn btn-secondary btn-sm" id="stopAllBtn">⏹</button>
+                    </div>
+                </div>
+                <div class="sources-list" id="sourcesList">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔇</div>
+                        <div>Brak źródeł</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="player-controls">
+                <div class="now-playing">Wybrane źródło</div>
+                <div class="now-playing-name" id="nowPlayingName">— brak —</div>
+                <div class="btn-group">
+                    <button class="btn btn-success" id="playBtn">▶ Play</button>
+                    <button class="btn btn-secondary" id="stopBtn">⏹</button>
+                </div>
+                <div class="volume-row">
+                    <span>🔊</span>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="70">
+                    <span class="volume-value" id="volumeValue">70%</span>
+                </div>
+            </div>
+
+            <div class="hints-sidebar">
+                <strong>Eksploracja:</strong> klik = idź, przeciągnij = obróć<br>
+                <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> ruch
+                <kbd>Q</kbd><kbd>E</kbd> obrót
+                <kbd>Space</kbd> play/pause
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // ============ AUDIO ============
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        document.addEventListener('click', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
+
+        // ============ STATE ============
+        const state = {
+            mode: 'edit',
+            listener: { x: 0, y: 0, angle: 0 },
+            target: null, // { x, y } - movement target
+            sources: [],
+            buffers: {},
+            selectedSource: null,
+            keys: {},
+            worldSize: 25,
+            moveSpeed: 6,
+            rotSpeed: 90,
+            // Drag state
+            isDragging: false,
+            dragStart: null,
+            dragStartAngle: 0
+        };
+
+        // ============ DOM ============
+        const app = document.getElementById('app');
+        const mainCanvas = document.getElementById('mainCanvas');
+        const ctx = mainCanvas.getContext('2d');
+        const minimapCanvas = document.getElementById('minimapCanvas');
+        const minimapCtx = minimapCanvas.getContext('2d');
+        const compassNeedle = document.getElementById('compassNeedle');
+        const hudPos = document.getElementById('hudPos');
+        const hudRot = document.getElementById('hudRot');
+        const targetIndicator = document.getElementById('targetIndicator');
+        const fileInput = document.getElementById('fileInput');
+        const fileDrop = document.getElementById('fileDrop');
+        const sourcesList = document.getElementById('sourcesList');
+        const nowPlayingName = document.getElementById('nowPlayingName');
+        const playBtn = document.getElementById('playBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const playAllBtn = document.getElementById('playAllBtn');
+        const stopAllBtn = document.getElementById('stopAllBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeValue = document.getElementById('volumeValue');
+
+        // ============ CANVAS SETUP ============
+        function resizeCanvases() {
+            const rect = mainCanvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            mainCanvas.width = rect.width * dpr;
+            mainCanvas.height = rect.height * dpr;
+            mainCanvas.style.width = rect.width + 'px';
+            mainCanvas.style.height = rect.height + 'px';
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            minimapCanvas.width = 160 * dpr;
+            minimapCanvas.height = 160 * dpr;
+            minimapCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+        window.addEventListener('resize', resizeCanvases);
+        resizeCanvases();
+
+        // ============ MODE ============
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.mode = btn.dataset.mode;
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                app.className = `app ${state.mode}-mode`;
+                state.target = null;
+            });
+        });
+
+        // ============ FILES ============
+        fileDrop.addEventListener('click', () => fileInput.click());
+        fileDrop.addEventListener('dragover', e => { e.preventDefault(); fileDrop.classList.add('dragover'); });
+        fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('dragover'));
+        fileDrop.addEventListener('drop', e => { e.preventDefault(); fileDrop.classList.remove('dragover'); handleFiles(e.dataTransfer.files); });
+        fileInput.addEventListener('change', () => { handleFiles(fileInput.files); fileInput.value = ''; });
+
+        async function handleFiles(files) {
+            for (const file of files) {
+                try {
+                    const buffer = await file.arrayBuffer();
+                    const decoded = await audioCtx.decodeAudioData(buffer);
+                    const id = `src_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+                    state.buffers[id] = decoded;
+
+                    const angle = Math.random() * Math.PI * 2;
+                    const dist = 5 + Math.random() * 10;
+
+                    const source = {
+                        id, name: file.name,
+                        x: Math.cos(angle) * dist,
+                        y: Math.sin(angle) * dist,
+                        volume: 0.7, playing: false, node: null,
+                        panner: audioCtx.createPanner(),
+                        gain: audioCtx.createGain()
+                    };
+
+                    source.panner.panningModel = 'HRTF';
+                    source.panner.distanceModel = 'inverse';
+                    source.panner.refDistance = 1;
+                    source.panner.maxDistance = 50;
+                    source.panner.rolloffFactor = 1;
+                    updateSourcePanner(source);
+
+                    source.gain.connect(source.panner);
+                    source.panner.connect(audioCtx.destination);
+                    source.gain.gain.value = source.volume;
+
+                    state.sources.push(source);
+                } catch (err) { console.error('Load error:', file.name, err); }
+            }
+            renderSourcesList();
+        }
+
+        function updateSourcePanner(src) {
+            if (src.panner.positionX) {
+                src.panner.positionX.setValueAtTime(src.x, audioCtx.currentTime);
+                src.panner.positionY.setValueAtTime(0, audioCtx.currentTime);
+                src.panner.positionZ.setValueAtTime(src.y, audioCtx.currentTime);
+            } else {
+                src.panner.setPosition(src.x, 0, src.y);
+            }
+        }
+
+        // ============ LISTENER ============
+        function updateListener() {
+            const l = audioCtx.listener;
+            const rad = state.listener.angle * Math.PI / 180;
+            
+            if (l.positionX) {
+                l.positionX.setValueAtTime(state.listener.x, audioCtx.currentTime);
+                l.positionY.setValueAtTime(0, audioCtx.currentTime);
+                l.positionZ.setValueAtTime(state.listener.y, audioCtx.currentTime);
+                l.forwardX.setValueAtTime(Math.sin(rad), audioCtx.currentTime);
+                l.forwardY.setValueAtTime(0, audioCtx.currentTime);
+                l.forwardZ.setValueAtTime(-Math.cos(rad), audioCtx.currentTime);
+                l.upX.setValueAtTime(0, audioCtx.currentTime);
+                l.upY.setValueAtTime(1, audioCtx.currentTime);
+                l.upZ.setValueAtTime(0, audioCtx.currentTime);
+            } else {
+                l.setPosition(state.listener.x, 0, state.listener.y);
+                l.setOrientation(Math.sin(rad), 0, -Math.cos(rad), 0, 1, 0);
+            }
+            
+            hudPos.textContent = `${state.listener.x.toFixed(1)}, ${state.listener.y.toFixed(1)}`;
+            hudRot.textContent = `${Math.round(state.listener.angle)}°`;
+            compassNeedle.style.transform = `rotate(${state.listener.angle}deg)`;
+        }
+
+        // ============ SOURCE CONTROLS ============
+        function selectSource(src) {
+            state.selectedSource = src;
+            nowPlayingName.textContent = src ? src.name : '— brak —';
+            if (src) {
+                volumeSlider.value = Math.round(src.volume * 100);
+                volumeValue.textContent = `${volumeSlider.value}%`;
+            }
+            renderSourcesList();
+        }
+
+        function playSource(src) {
+            if (!src || src.playing) return;
+            src.node = audioCtx.createBufferSource();
+            src.node.buffer = state.buffers[src.id];
+            src.node.loop = true;
+            src.node.connect(src.gain);
+            src.node.start();
+            src.playing = true;
+            renderSourcesList();
+        }
+
+        function stopSource(src) {
+            if (!src || !src.playing) return;
+            src.node.stop();
+            src.node = null;
+            src.playing = false;
+            renderSourcesList();
+        }
+
+        function removeSource(id) {
+            const idx = state.sources.findIndex(s => s.id === id);
+            if (idx === -1) return;
+            const src = state.sources[idx];
+            stopSource(src);
+            if (state.selectedSource === src) { state.selectedSource = null; nowPlayingName.textContent = '— brak —'; }
+            src.gain.disconnect();
+            src.panner.disconnect();
+            delete state.buffers[id];
+            state.sources.splice(idx, 1);
+            renderSourcesList();
+        }
+
+        function renderSourcesList() {
+            if (state.sources.length === 0) {
+                sourcesList.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔇</div><div>Brak źródeł</div></div>`;
+                return;
+            }
+            sourcesList.innerHTML = state.sources.map((src, idx) => {
+                const dist = Math.hypot(src.x - state.listener.x, src.y - state.listener.y).toFixed(1);
+                return `
+                    <div class="source-item ${state.selectedSource === src ? 'selected' : ''} ${src.playing ? 'playing' : ''}" data-id="${src.id}">
+                        <div class="source-number">${idx + 1}</div>
+                        <div class="source-info">
+                            <div class="source-name">${src.name}</div>
+                            <div class="source-meta">${dist} m</div>
+                        </div>
+                        <button class="source-btn ${src.playing ? 'playing' : ''}" data-action="toggle">${src.playing ? '⏸' : '▶'}</button>
+                        <button class="source-btn delete" data-action="delete">✕</button>
+                    </div>`;
+            }).join('');
+
+            sourcesList.querySelectorAll('.source-item').forEach(el => {
+                const src = state.sources.find(s => s.id === el.dataset.id);
+                el.addEventListener('click', e => { if (!e.target.closest('.source-btn')) selectSource(src); });
+                el.querySelector('[data-action="toggle"]').addEventListener('click', () => src.playing ? stopSource(src) : playSource(src));
+                el.querySelector('[data-action="delete"]').addEventListener('click', () => removeSource(src.id));
+            });
+        }
+
+        playBtn.addEventListener('click', () => {
+            if (!state.selectedSource) return;
+            if (state.selectedSource.playing) { stopSource(state.selectedSource); playBtn.textContent = '▶ Play'; }
+            else { playSource(state.selectedSource); playBtn.textContent = '⏸ Pause'; }
+        });
+        stopBtn.addEventListener('click', () => { if (state.selectedSource) { stopSource(state.selectedSource); playBtn.textContent = '▶ Play'; } });
+        playAllBtn.addEventListener('click', () => state.sources.forEach(s => playSource(s)));
+        stopAllBtn.addEventListener('click', () => { state.sources.forEach(s => stopSource(s)); playBtn.textContent = '▶ Play'; });
+        volumeSlider.addEventListener('input', () => {
+            volumeValue.textContent = `${volumeSlider.value}%`;
+            if (state.selectedSource) {
+                state.selectedSource.volume = volumeSlider.value / 100;
+                state.selectedSource.gain.gain.setValueAtTime(state.selectedSource.volume, audioCtx.currentTime);
+            }
+        });
+
+        // ============ KEYBOARD ============
+        document.addEventListener('keydown', e => {
+            if (e.target.tagName === 'INPUT') return;
+            state.keys[e.code] = true;
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (state.selectedSource) {
+                    state.selectedSource.playing ? stopSource(state.selectedSource) : playSource(state.selectedSource);
+                    playBtn.textContent = state.selectedSource.playing ? '⏸ Pause' : '▶ Play';
+                }
+            }
+        });
+        document.addEventListener('keyup', e => { state.keys[e.code] = false; });
+
+        // ============ MOUSE / TOUCH ============
+        function getCanvasPos(e) {
+            const rect = mainCanvas.getBoundingClientRect();
+            return { x: e.clientX - rect.left, y: e.clientY - rect.top, rect };
+        }
+
+        function screenToWorld(screenX, screenY, rect) {
+            const size = Math.min(rect.width, rect.height);
+            const scale = size / (state.worldSize * 2);
+            const cx = rect.width / 2;
+            const cy = rect.height / 2;
+
+            if (state.mode === 'explore') {
+                const rad = state.listener.angle * Math.PI / 180;
+                const sx = (screenX - cx) / scale;
+                const sy = (screenY - cy) / scale;
+                // Rotate from screen space to world space
+                return {
+                    x: state.listener.x + sx * Math.cos(rad) + sy * Math.sin(rad),
+                    y: state.listener.y - sx * Math.sin(rad) + sy * Math.cos(rad)
+                };
+            } else {
+                return { x: (screenX - cx) / scale, y: (screenY - cy) / scale };
+            }
+        }
+
+        function worldToScreen(worldX, worldY) {
+            const rect = mainCanvas.getBoundingClientRect();
+            const size = Math.min(rect.width, rect.height);
+            const scale = size / (state.worldSize * 2);
+            const cx = rect.width / 2;
+            const cy = rect.height / 2;
+
+            if (state.mode === 'explore') {
+                const rad = state.listener.angle * Math.PI / 180;
+                const dx = worldX - state.listener.x;
+                const dy = worldY - state.listener.y;
+                // Rotate from world space to screen space
+                const sx = dx * Math.cos(rad) - dy * Math.sin(rad);
+                const sy = dx * Math.sin(rad) + dy * Math.cos(rad);
+                return { x: cx + sx * scale, y: cy + sy * scale };
+            } else {
+                return { x: cx + worldX * scale, y: cy + worldY * scale };
+            }
+        }
+
+        function findSourceAt(wx, wy, threshold = 1.5) {
+            for (const src of state.sources) {
+                if (Math.hypot(src.x - wx, src.y - wy) < threshold) return src;
+            }
+            return null;
+        }
+
+        // Dragging sources (edit mode) or looking around (explore mode)
+        let draggedSource = null;
+        let pointerDown = false;
+        let pointerMoved = false;
+        let pointerStart = { x: 0, y: 0 };
+
+        mainCanvas.addEventListener('mousedown', e => handlePointerDown(e.clientX, e.clientY));
+        mainCanvas.addEventListener('mousemove', e => handlePointerMove(e.clientX, e.clientY));
+        mainCanvas.addEventListener('mouseup', e => handlePointerUp(e.clientX, e.clientY));
+        mainCanvas.addEventListener('mouseleave', () => { pointerDown = false; draggedSource = null; });
+
+        mainCanvas.addEventListener('touchstart', e => { e.preventDefault(); handlePointerDown(e.touches[0].clientX, e.touches[0].clientY); });
+        mainCanvas.addEventListener('touchmove', e => { e.preventDefault(); handlePointerMove(e.touches[0].clientX, e.touches[0].clientY); });
+        mainCanvas.addEventListener('touchend', e => { handlePointerUp(pointerStart.x, pointerStart.y); });
+
+        function handlePointerDown(clientX, clientY) {
+            pointerDown = true;
+            pointerMoved = false;
+            pointerStart = { x: clientX, y: clientY };
+
+            const { x, y, rect } = getCanvasPos({ clientX, clientY });
+            const world = screenToWorld(x, y, rect);
+
+            if (state.mode === 'edit') {
+                const src = findSourceAt(world.x, world.y);
+                if (src) {
+                    draggedSource = src;
+                    selectSource(src);
+                }
+            } else {
+                // Explore mode - prepare for drag to look
+                state.dragStartAngle = state.listener.angle;
+            }
+        }
+
+        function handlePointerMove(clientX, clientY) {
+            if (!pointerDown) return;
+
+            const dx = clientX - pointerStart.x;
+            const dy = clientY - pointerStart.y;
+
+            if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+                pointerMoved = true;
+            }
+
+            if (state.mode === 'edit' && draggedSource) {
+                const { x, y, rect } = getCanvasPos({ clientX, clientY });
+                const world = screenToWorld(x, y, rect);
+                const maxDist = state.worldSize - 1;
+                draggedSource.x = Math.max(-maxDist, Math.min(maxDist, world.x));
+                draggedSource.y = Math.max(-maxDist, Math.min(maxDist, world.y));
+                updateSourcePanner(draggedSource);
+                renderSourcesList();
+            } else if (state.mode === 'explore' && pointerMoved) {
+                // Drag to rotate view
+                state.listener.angle = state.dragStartAngle + dx * 0.5;
+                state.listener.angle = ((state.listener.angle % 360) + 360) % 360;
+                updateListener();
+            }
+        }
+
+        function handlePointerUp(clientX, clientY) {
+            if (state.mode === 'explore' && !pointerMoved && pointerDown) {
+                // Click without drag = move to location
+                const { x, y, rect } = getCanvasPos({ clientX, clientY });
+                const world = screenToWorld(x, y, rect);
+                
+                // Clamp target to world bounds
+                const maxDist = state.worldSize - 1;
+                state.target = {
+                    x: Math.max(-maxDist, Math.min(maxDist, world.x)),
+                    y: Math.max(-maxDist, Math.min(maxDist, world.y))
+                };
+            }
+
+            pointerDown = false;
+            draggedSource = null;
+        }
+
+        // Minimap click
+        const minimap = document.querySelector('.minimap');
+        minimap.addEventListener('click', e => {
+            if (state.mode !== 'explore') return;
+            
+            const rect = minimapCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const size = rect.width;
+            const scale = size / (state.worldSize * 2);
+            
+            const worldX = (x - size / 2) / scale;
+            const worldY = (y - size / 2) / scale;
+            
+            const maxDist = state.worldSize - 1;
+            state.target = {
+                x: Math.max(-maxDist, Math.min(maxDist, worldX)),
+                y: Math.max(-maxDist, Math.min(maxDist, worldY))
+            };
+        });
+
+        // ============ GAME LOOP ============
+        let lastTime = 0;
+
+        function gameLoop(time) {
+            const dt = Math.min((time - lastTime) / 1000, 0.1);
+            lastTime = time;
+
+            // Keyboard movement
+            if (state.mode === 'explore') {
+                const rad = state.listener.angle * Math.PI / 180;
+                let moveX = 0, moveY = 0;
+
+                // W/S = forward/backward (in direction of facing)
+                if (state.keys['KeyW'] || state.keys['ArrowUp']) { moveX += Math.sin(rad); moveY -= Math.cos(rad); }
+                if (state.keys['KeyS'] || state.keys['ArrowDown']) { moveX -= Math.sin(rad); moveY += Math.cos(rad); }
+                // A/D = strafe left/right
+                if (state.keys['KeyA']) { moveX -= Math.cos(rad); moveY -= Math.sin(rad); }
+                if (state.keys['KeyD']) { moveX += Math.cos(rad); moveY += Math.sin(rad); }
+                if (state.keys['KeyQ'] || state.keys['ArrowLeft']) { state.listener.angle -= state.rotSpeed * dt; }
+                if (state.keys['KeyE'] || state.keys['ArrowRight']) { state.listener.angle += state.rotSpeed * dt; }
+
+                // Keyboard movement cancels click target
+                if (moveX !== 0 || moveY !== 0) {
+                    state.target = null;
+                    const len = Math.hypot(moveX, moveY);
+                    state.listener.x += (moveX / len) * state.moveSpeed * dt;
+                    state.listener.y += (moveY / len) * state.moveSpeed * dt;
+                }
+
+                // Move towards target
+                if (state.target) {
+                    const dx = state.target.x - state.listener.x;
+                    const dy = state.target.y - state.listener.y;
+                    const dist = Math.hypot(dx, dy);
+
+                    if (dist < 0.3) {
+                        state.target = null;
+                    } else {
+                        const step = Math.min(state.moveSpeed * dt, dist);
+                        state.listener.x += (dx / dist) * step;
+                        state.listener.y += (dy / dist) * step;
+                    }
+                }
+
+                // Clamp position
+                const maxDist = state.worldSize - 1;
+                state.listener.x = Math.max(-maxDist, Math.min(maxDist, state.listener.x));
+                state.listener.y = Math.max(-maxDist, Math.min(maxDist, state.listener.y));
+
+                // Normalize angle
+                state.listener.angle = ((state.listener.angle % 360) + 360) % 360;
+
+                updateListener();
+                renderSourcesList(); // Update distances
+            }
+
+            // Update target indicator
+            if (state.target && state.mode === 'explore') {
+                const screen = worldToScreen(state.target.x, state.target.y);
+                targetIndicator.style.left = screen.x - 12 + 'px';
+                targetIndicator.style.top = screen.y - 12 + 'px';
+                targetIndicator.classList.add('visible');
+            } else {
+                targetIndicator.classList.remove('visible');
+            }
+
+            draw();
+            drawMinimap();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // ============ DRAW ============
+        function draw() {
+            const w = mainCanvas.width / (window.devicePixelRatio || 1);
+            const h = mainCanvas.height / (window.devicePixelRatio || 1);
+
+            ctx.fillStyle = '#0d1117';
+            ctx.fillRect(0, 0, w, h);
+
+            const size = Math.min(w, h);
+            const scale = size / (state.worldSize * 2);
+            const cx = w / 2;
+            const cy = h / 2;
+
+            ctx.save();
+            ctx.translate(cx, cy);
+
+            if (state.mode === 'explore') {
+                const rad = state.listener.angle * Math.PI / 180;
+                ctx.rotate(-rad);
+                ctx.translate(-state.listener.x * scale, -state.listener.y * scale);
+            }
+
+            // Grid
+            ctx.strokeStyle = 'rgba(88, 166, 255, 0.06)';
+            ctx.lineWidth = 1;
+            for (let i = -state.worldSize; i <= state.worldSize; i += 5) {
+                ctx.beginPath();
+                ctx.moveTo(i * scale, -state.worldSize * scale);
+                ctx.lineTo(i * scale, state.worldSize * scale);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(-state.worldSize * scale, i * scale);
+                ctx.lineTo(state.worldSize * scale, i * scale);
+                ctx.stroke();
+            }
+
+            // World boundary
+            ctx.strokeStyle = 'rgba(88, 166, 255, 0.2)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(-state.worldSize * scale, -state.worldSize * scale, state.worldSize * 2 * scale, state.worldSize * 2 * scale);
+
+            // Target path
+            if (state.target && state.mode === 'explore') {
+                ctx.strokeStyle = 'rgba(247, 129, 102, 0.3)';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([8, 8]);
+                ctx.beginPath();
+                ctx.moveTo(state.listener.x * scale, state.listener.y * scale);
+                ctx.lineTo(state.target.x * scale, state.target.y * scale);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Target marker
+                ctx.strokeStyle = 'rgba(247, 129, 102, 0.6)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(state.target.x * scale, state.target.y * scale, 10, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            // Sources
+            state.sources.forEach((src, idx) => {
+                const sx = src.x * scale;
+                const sy = src.y * scale;
+
+                if (src.playing) {
+                    const gradient = ctx.createRadialGradient(sx, sy, 0, sx, sy, 50);
+                    gradient.addColorStop(0, 'rgba(63, 185, 80, 0.4)');
+                    gradient.addColorStop(1, 'rgba(63, 185, 80, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, 50, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                const isSelected = state.selectedSource === src;
+                ctx.fillStyle = isSelected ? '#f78166' : (src.playing ? '#3fb950' : '#58a6ff');
+                ctx.beginPath();
+                ctx.arc(sx, sy, isSelected ? 14 : 12, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 11px system-ui';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText((idx + 1).toString(), sx, sy);
+
+                if (state.mode === 'edit') {
+                    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+                    ctx.font = '10px system-ui';
+                    const label = src.name.length > 15 ? src.name.slice(0, 12) + '...' : src.name;
+                    ctx.fillText(label, sx, sy + 24);
+                }
+            });
+
+            // Listener
+            const lx = state.listener.x * scale;
+            const ly = state.listener.y * scale;
+
+            if (state.mode === 'edit') {
+                const lrad = state.listener.angle * Math.PI / 180;
+
+                ctx.fillStyle = 'rgba(88, 166, 255, 0.1)';
+                ctx.beginPath();
+                ctx.moveTo(lx, ly);
+                ctx.arc(lx, ly, 100, lrad - Math.PI / 2 - Math.PI / 4, lrad - Math.PI / 2 + Math.PI / 4);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.strokeStyle = '#58a6ff';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(lx, ly);
+                ctx.lineTo(lx + Math.sin(lrad) * 35, ly - Math.cos(lrad) * 35);
+                ctx.stroke();
+
+                ctx.fillStyle = '#58a6ff';
+                ctx.beginPath();
+                ctx.arc(lx, ly, 12, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#0d1117';
+                ctx.beginPath();
+                ctx.arc(lx, ly, 6, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.restore();
+
+            // FOV overlay in explore mode
+            if (state.mode === 'explore') {
+                ctx.fillStyle = 'rgba(88, 166, 255, 0.03)';
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.arc(cx, cy, size * 0.45, -Math.PI / 2 - Math.PI / 4, -Math.PI / 2 + Math.PI / 4);
+                ctx.closePath();
+                ctx.fill();
+
+                // Center marker
+                ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(cx - 15, cy);
+                ctx.lineTo(cx - 5, cy);
+                ctx.moveTo(cx + 5, cy);
+                ctx.lineTo(cx + 15, cy);
+                ctx.moveTo(cx, cy - 15);
+                ctx.lineTo(cx, cy - 5);
+                ctx.moveTo(cx, cy + 5);
+                ctx.lineTo(cx, cy + 15);
+                ctx.stroke();
+            }
+        }
+
+        function drawMinimap() {
+            const size = 160;
+            const scale = size / (state.worldSize * 2);
+
+            minimapCtx.fillStyle = '#161b22';
+            minimapCtx.fillRect(0, 0, size, size);
+
+            minimapCtx.save();
+            minimapCtx.translate(size / 2, size / 2);
+
+            // Grid
+            minimapCtx.strokeStyle = 'rgba(88, 166, 255, 0.1)';
+            minimapCtx.lineWidth = 1;
+            for (let i = -state.worldSize; i <= state.worldSize; i += 10) {
+                minimapCtx.beginPath();
+                minimapCtx.moveTo(i * scale, -state.worldSize * scale);
+                minimapCtx.lineTo(i * scale, state.worldSize * scale);
+                minimapCtx.stroke();
+                minimapCtx.beginPath();
+                minimapCtx.moveTo(-state.worldSize * scale, i * scale);
+                minimapCtx.lineTo(state.worldSize * scale, i * scale);
+                minimapCtx.stroke();
+            }
+
+            // Boundary
+            minimapCtx.strokeStyle = 'rgba(88, 166, 255, 0.3)';
+            minimapCtx.strokeRect(-state.worldSize * scale, -state.worldSize * scale, state.worldSize * 2 * scale, state.worldSize * 2 * scale);
+
+            // Target
+            if (state.target) {
+                minimapCtx.fillStyle = 'rgba(247, 129, 102, 0.5)';
+                minimapCtx.beginPath();
+                minimapCtx.arc(state.target.x * scale, state.target.y * scale, 4, 0, Math.PI * 2);
+                minimapCtx.fill();
+            }
+
+            // Sources
+            state.sources.forEach(src => {
+                minimapCtx.fillStyle = src.playing ? '#3fb950' : '#58a6ff';
+                minimapCtx.beginPath();
+                minimapCtx.arc(src.x * scale, src.y * scale, 4, 0, Math.PI * 2);
+                minimapCtx.fill();
+            });
+
+            // Listener
+            const lx = state.listener.x * scale;
+            const ly = state.listener.y * scale;
+            const lrad = state.listener.angle * Math.PI / 180;
+
+            minimapCtx.fillStyle = 'rgba(247, 129, 102, 0.2)';
+            minimapCtx.beginPath();
+            minimapCtx.moveTo(lx, ly);
+            minimapCtx.arc(lx, ly, 20, lrad - Math.PI / 2 - Math.PI / 4, lrad - Math.PI / 2 + Math.PI / 4);
+            minimapCtx.closePath();
+            minimapCtx.fill();
+
+            minimapCtx.fillStyle = '#f78166';
+            minimapCtx.beginPath();
+            minimapCtx.arc(lx, ly, 5, 0, Math.PI * 2);
+            minimapCtx.fill();
+
+            minimapCtx.strokeStyle = '#f78166';
+            minimapCtx.lineWidth = 2;
+            minimapCtx.beginPath();
+            minimapCtx.moveTo(lx, ly);
+            minimapCtx.lineTo(lx + Math.sin(lrad) * 12, ly - Math.cos(lrad) * 12);
+            minimapCtx.stroke();
+
+            minimapCtx.restore();
+        }
+
+        // Start
+        updateListener();
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>
