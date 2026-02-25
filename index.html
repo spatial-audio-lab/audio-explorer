@@ -997,6 +997,7 @@
         document.addEventListener('touchstart', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
 
         // ============ STATE ============
+        let compassRotation = 0; // Skumulowany obrót kompasu dla płynnej animacji
         const state = {
             mode: 'edit',
             sceneName: null,
@@ -1250,7 +1251,13 @@
 
             hudPos.textContent = `${state.listener.x.toFixed(1)}, ${state.listener.y.toFixed(1)}`;
             hudRot.textContent = `${Math.round(state.listener.angle)}°`;
-            compassNeedle.style.transform = `rotate(${state.listener.angle}deg)`;
+            // Kompas - oblicz najkrótszą ścieżkę rotacji (eliminuje skok 359°→0°)
+            const targetCompassAngle = -state.listener.angle;
+            let delta = targetCompassAngle - compassRotation;
+            while (delta > 180) delta -= 360;
+            while (delta < -180) delta += 360;
+            compassRotation += delta;
+            compassNeedle.style.transform = `rotate(${compassRotation}deg)`;
         }
 
         // ============ SOURCE CONTROLS ============
@@ -1550,8 +1557,8 @@
                 const sx = (screenX - cx) / scale;
                 const sy = (screenY - cy) / scale;
                 return {
-                    x: state.listener.x + sx * Math.cos(rad) + sy * Math.sin(rad),
-                    y: state.listener.y - sx * Math.sin(rad) + sy * Math.cos(rad)
+                    x: state.listener.x + sx * Math.cos(rad) - sy * Math.sin(rad),
+                    y: state.listener.y + sx * Math.sin(rad) + sy * Math.cos(rad)
                 };
             } else {
                 return { x: (screenX - cx) / scale, y: (screenY - cy) / scale };
@@ -1569,8 +1576,9 @@
                 const rad = state.listener.angle * Math.PI / 180;
                 const dx = worldX - state.listener.x;
                 const dy = worldY - state.listener.y;
-                const sx = dx * Math.cos(rad) - dy * Math.sin(rad);
-                const sy = dx * Math.sin(rad) + dy * Math.cos(rad);
+                // Macierz rotacji o -rad (zgodna z ctx.rotate(-rad) w draw)
+                const sx = dx * Math.cos(rad) + dy * Math.sin(rad);
+                const sy = -dx * Math.sin(rad) + dy * Math.cos(rad);
                 return { x: cx + sx * scale, y: cy + sy * scale };
             } else {
                 return { x: cx + worldX * scale, y: cy + worldY * scale };
