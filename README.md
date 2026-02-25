@@ -1,57 +1,136 @@
-# **Spatial Audio Explorer**
+# 🎧 3D Audio Explorer
 
-Interaktywne środowisko przeglądarkowe do symulacji i badania akustyki przestrzennej. Narzędzie wykorzystuje standard **Web Audio API** oraz modelowanie **HRTF** (Head-Related Transfer Function) do precyzyjnej lokacji źródeł dźwięku w przestrzeni dwuwymiarowej z odwzorowaniem sferycznym.
+Interaktywna przeglądarkowa aplikacja do tworzenia i eksplorowania **immersyjnych scenografii dźwiękowych** z pełnym przestrzennym pozycjonowaniem źródeł dźwięku. Wykorzystuje **Web Audio API** z modelem **HRTF** (Head-Related Transfer Function) dla precyzyjnej lokalizacji dźwięku w przestrzeni trójwymiarowej.
 
-## **Kluczowe funkcjonalności**
+---
 
-* **Renderowanie przestrzenne:** Pełna implementacja węzłów PannerNode oraz AudioListener, umożliwiająca analizę zmian natężenia i barwy dźwięku w zależności od pozycji (![][image1]) oraz rotacji słuchacza.  
-* **Architektura dwutrybowa:**  
-  * **Tryb Projektowy (Edit):** Precyzyjne rozmieszczanie źródeł sygnału w przestrzeni laboratoryjnej.  
-  * **Tryb Eksploracji (Explore):** Interaktywna weryfikacja sceny dźwiękowej z perspektywy użytkownika końcowego.  
-* **Monitorowanie parametrów:** Podgląd współrzędnych geograficznych oraz kąta orientacji w czasie rzeczywistym (HUD).  
-* **Analiza dystansu:** Wizualizacja tłumienia sygnału zgodnie z modelem fizycznym inverse distance.
+## ✨ Funkcjonalności
 
-## **Zastosowanie**
+### 🗺️ Dwa tryby pracy
 
-Projekt służy jako platforma do:
+**Tryb Edycji (`Edit`)**
+- Rozmieszczanie i **przeciąganie źródeł dźwięku** po przestrzeni 2D
+- Podgląd etykiet ze skróconymi nazwami plików bezpośrednio na mapie
+- Wizualny wskaźnik orientacji słuchacza (kierunek patrzenia + stożek percepcji)
+- Precyzyjne pozycjonowanie bez ograniczeń ruchowych
 
-1. Prototypowania systemów audio w środowiskach wirtualnych.  
-2. Badań nad percepcją dźwięku przestrzennego.  
-3. Tworzenia dynamicznych opraw akustycznych dla gier i symulacji RPG.  
-4. Edukacji w zakresie inżynierii dźwięku i akustyki cyfrowej.
+**Tryb Eksploracji (`Explore`)**
+- **Poruszanie się** po przestrzeni dźwiękowej w czasie rzeczywistym
+- **Klikanie na mapę** — słuchacz automatycznie idzie do wskazanego miejsca z animowanym wskaźnikiem celu
+- **Przeciąganie myszą** — obracanie kierunku patrzenia/słuchania
+- Automatyczna aktualizacja parametrów przestrzennych (pozycja + orientacja) w Web Audio API
 
-## **Specyfikacja sterowania**
+### 🎵 Silnik Audio Przestrzennego
+- **Model HRTF** via `PannerNode` — symulacja percepcji przestrzennej z użyciem obu uszu
+- **Model tłumienia `inverse distance`** — naturalne cichnienie z odległością (refDistance: 1m, maxDistance: 50m)
+- Pełna aktualizacja pozycji i orientacji `AudioListener` w czasie rzeczywistym (positionX/Y/Z + forwardX/Y/Z)
+- Obsługa wielu źródeł jednocześnie z indywidualnymi węzłami `PannerNode` + `GainNode`
+- Pętlowe odtwarzanie (`loop: true`) dla ciągłych pejzaży dźwiękowych
 
-| **Interakcja** | **Funkcja** |
+### 📂 Zarządzanie Źródłami
+- **Drag & Drop** lub kliknięcie — ładowanie plików audio (mp3, wav, ogg, flac i inne)
+- Odczyt i dekodowanie przez `decodeAudioData` — pełna jakość bez kompresji
+- Indywidualna kontrola **głośności** każdego źródła (suwak 0–100%)
+- **Play / Pause / Stop** — dla wybranego źródła lub wszystkich jednocześnie
+- Usuwanie źródeł z automatycznym zwolnieniem zasobów audio
 
-| **W, A, S, D** | Translacja pozycji słuchacza w osiach X/Y |
+### 💾 Sceny (Save/Load)
+- **Zapis sceny** — eksport do pliku `.json` zawierającego pozycje źródeł, głośności i pozycję słuchacza
+- **Wczytanie sceny** — dopasowanie po nazwie pliku i przywrócenie pozycji/parametrów
+- Skrót klawiszowy `Ctrl+S` / `⌘+S` do szybkiego zapisu
+- Badge nazwy sceny widoczny na mapie po wczytaniu
 
-| **Q, E** | Manipulacja rotacją (azymut słuchacza) |
+### 🗺️ Interfejs i Nawigacja
+- **Minimap** — podgląd całej przestrzeni z pozycją słuchacza i wszystkich źródeł
+- **Klikalna minimap** — teleportacja celu w trybie Eksploracji
+- **HUD** — aktualne współrzędne `(X, Y)` i kąt orientacji w stopniach
+- **Kompas** — animowana igła z płynną rotacją (eliminacja skoku 359°→0°)
+- **Wskaźnik celu** — pulsująca animacja w miejscu klikniętym na mapie
 
-| **LPM (Mapa)** | Definiowanie wektora ruchu do celu |
+### ⌨️ Sterowanie Klawiaturą
+| Klawisz | Akcja |
+|---------|-------|
+| `W` / `↑` | Ruch do przodu |
+| `S` / `↓` | Ruch do tyłu |
+| `A` | Ruch w lewo (strafe) |
+| `D` | Ruch w prawo (strafe) |
+| `Q` / `←` | Obrót w lewo |
+| `E` / `→` | Obrót w prawo |
+| `Spacja` | Play/Pause wybranego źródła |
+| `Ctrl+S` | Zapisz scenę |
 
-| **Przeciąganie (Explore)** | Zmiana orientacji wektora patrzenia |
+### 📱 Responsywność Mobile
+- **Bottom sheet** z obsługą gestów swipe (rozwinięcie/zwinięcie/peek)
+- **FAB** (Floating Action Button) — globalny Play/Pause wszystkich źródeł
+- Osobna lista źródeł z dużymi przyciskami touch-friendly (min. 44×44px)
+- Pełna obsługa `touchstart` / `touchmove` / `touchend` na canvasie
 
-| **Przeciąganie (Edit)** | Relokacja wybranych źródeł sygnału |
+---
 
-| **Spacja** | Kontrola stanu odtwarzania (Play/Pause) |
+## 🛠️ Architektura Techniczna
 
-## **Architektura techniczna**
+Aplikacja jest w pełni **autonomiczna** — zero zewnętrznych zależności, jeden plik HTML:
 
-Aplikacja jest w pełni autonomiczna i nie wymaga zewnętrznych zależności (Zero-dependency):
+| Technologia | Zastosowanie |
+|-------------|--------------|
+| **Web Audio API** | Silnik DSP, PannerNode, GainNode, AudioListener |
+| **HTML5 Canvas 2D** | Mapa główna i minimap w czasie rzeczywistym |
+| **Vanilla JavaScript ES6+** | Stan aplikacji, game loop, obsługa eventów |
+| **CSS Custom Properties** | System kolorów i responsywność |
 
-* **Web Audio API:** Silnik przetwarzania sygnałów i renderowania 3D.  
-* **HTML5 Canvas:** System wizualizacji wektorowej środowiska.  
-* **Vanilla JavaScript (ES6+):** Zarządzanie stanem i obsługa zdarzeń.
+### Pętla gry (Game Loop)
+Aplikacja działa w oparciu o `requestAnimationFrame` z delta-time (`dt`), co zapewnia płynne poruszanie się niezależnie od FPS. Słuchacz porusza się z prędkością 6 jednostek/s, obraca się z prędkością 90°/s.
 
-## **Uruchomienie projektu**
+### Układ Współrzędnych
+Przestrzeń to kwadrat `±25 jednostek` (25m × 25m). Jednostka ≈ 1 metr akustyczny. Oś `X` = lewo/prawo, oś `Y` = przód/tył. Wysokość (oś pionowa) = 0 (płaska scena 2D z HRTF w przestrzeni horyzontalnej).
 
-1. Sklonuj repozytorium:  
-   git clone \[https://github.com/spatial-audio-lab/audio-explorer.git\](https://github.com/spatial-audio-lab/audio-explorer.git)
+---
 
-2. Otwórz plik index.html w środowisku zgodnym z Web Audio API (Chrome 60+, Firefox 55+, Edge 79+).  
-3. **Uwaga:** Ze względów bezpieczeństwa (Autoplay Policy), interakcja ze stroną jest wymagana do zainicjowania kontekstu audio.
+## 🎧 Jak Zacząć
 
-*Projekt rozwijany w ramach Spatial Audio Lab.*
+> **Używaj słuchawek** — efekt przestrzenny jest perceptualny i wymaga izolacji kanałów L/R.
 
-[image1]: <data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEEAAAAZCAYAAABuKkPfAAAC6UlEQVR4Xu2Xv2sUURDH9zCCoqCF55H7sXs/sDhUVA4ExTKgQbAwjWBhaXOFWGhr43+QSisRUTCQQrCJhRgLsRBTxIAgkRBIJcGARRA9v9/beeHtZPdufwkp9gPD3puZNzs7b/a9PccpKCgoiKDValU8zxso+eW6bg/XLuSHsv3WMcKoVCqH4PtGzaVM237NZvO29rHtScDchzpWiATuH6DRaJyCwybkOYYTRo/xDOSL5ZoYzN+QBOa0rd1uH4F+odfr7de2JMiibek4WGQPtq+wPdK2MCZYABaCBaECAc4zAK/aOQkSl0XYsPVMislRbH0akOd9dNU7WycFHnYjf9u2SBDkiiTb5xjXVchV7ZcUxL0hcQOtjsTvQbcQO8EIEP8A4swzf1tvCsCFtPVjMclCtjEsaXtKSog3y7h2l2XtsBGUpMCbqe7BiVK9F9qWBemyv5A+31OwpH1ywhSACzmjjbHAxE8SYF3bsiCn0AoSXMN1lYlqnzzgg0P+UJwUnTysoKzSBxYi67uqkeNwhQXRtjxg68sCBk4CjLvVavWY7RvGsABI8iMHmNRnMOguaccMcF945vnH5M4RnBdcPDkKn/IbxbZBd9MZ1xWe30JLDCRj85E064ybHBOuBOItsxu0LSujjsJ6vX4Q+te2bhdwuBi2g+rjMgw557nZsVgjV1dehUGctjTIww0w9462GSQHdu0a/M7aNuimPH+j3/WRRvbJF+JjCXCSOmNEsKOQy1KEz6jm6bCvLdgmxYdd09V2wnm4Vwf2RXmgZqfTOe5Y94vC9b8CGX85onjmJNjGPa5JPpPI9wRuc0vmUvg6BIFy2nKgrENatJXL5cP4/VbZWagpHUdWgTvxT8gFbSfQ39WxIN/ibI7SCYz/3byqNtCdgW0rJL4tO8/235B3/RWqX9O2PPD8/eklF0fb9gxI8Dpa74kzZk9Ii+v/J3ig9XsKFOE95JzW5wViL9ZqtbrWFxQUFBTkzD9lHgJCvLn6xwAAAABJRU5ErkJggg==>
+1. Otwórz `index.html` w przeglądarce (Chrome 90+, Firefox 90+, Safari 14.1+, Edge 90+)
+2. Kliknij dowolnie na stronie, aby odblokować `AudioContext` (wymóg przeglądarek)
+3. Przeciągnij lub wgraj pliki audio (mp3, wav, ogg...)
+4. Kliknij **▶ All** lub pojedynczy przycisk Play przy źródle
+5. Przełącz na tryb **Eksploracja** i chodź po przestrzeni klawiszami `WASD`
+
+### Skąd Wziąć Dźwięki?
+
+| Biblioteka | Licencja | Charakterystyka |
+|-----------|----------|-----------------|
+| [Freesound.org](https://freesound.org/browse/tags/cc0/) | CC0 / CC-BY | Ogromna baza efektów i ambientów |
+| [Mixkit](https://mixkit.co/free-sound-effects/) | Darmowa | Efekty dźwiękowe |
+| [Pixabay Audio](https://pixabay.com/sound-effects/) | CC0 | Bez wymaganej atrybucji |
+| [BBC Sound Effects](https://sound-effects.bbcrewind.co.uk/) | Osobisty | Profesjonalne nagrania terenowe |
+| [Aporee.org](https://aporee.org/maps/) | CC-BY | Field recordings z całego świata |
+
+---
+
+## 🌐 Kompatybilność
+
+| Przeglądarka | Wersja Min. | Status |
+|-------------|------------|--------|
+| Chrome / Chromium | 90+ | ✅ Pełna obsługa |
+| Firefox | 90+ | ✅ Pełna obsługa |
+| Safari | 14.1+ | ✅ Pełna obsługa |
+| Edge | 90+ | ✅ Pełna obsługa |
+| Mobile Chrome | Tak | ✅ + UI mobilne |
+| Mobile Safari | iOS 14.1+ | ✅ + UI mobilne |
+
+> ⚠️ Ze względu na **Autoplay Policy** przeglądarek, kontekst audio aktywuje się po pierwszej interakcji użytkownika (klik lub dotyk).
+
+---
+
+## 📁 Struktura Projektu
+
+```
+spatial-audio-lab/
+├── index.html      # Cała aplikacja (self-contained, zero dependencies)
+└── README.md       # Dokumentacja
+```
+
+---
+
+*Projekt rozwijany w ramach [Spatial Audio Lab](https://github.com/spatial-audio-lab).*
