@@ -134,7 +134,6 @@
         .mode-btn.active { background: var(--primary); color: #fff; }
         .mode-btn:hover:not(.active) { color: var(--text); }
 
-        /* Scene buttons */
         .scene-btns {
             display: flex;
             gap: 4px;
@@ -256,8 +255,8 @@
             backdrop-filter: blur(8px);
         }
 
-        @media (max-width: 800px) { 
-            .compass { right: 16px; top: 70px; width: 50px; height: 50px; } 
+        @media (max-width: 800px) {
+            .compass { right: 16px; top: 70px; width: 50px; height: 50px; }
         }
 
         .compass-needle {
@@ -277,7 +276,7 @@
             color: var(--accent);
         }
 
-        /* ============ CONTROL HINTS (Desktop) ============ */
+        /* ============ CONTROL HINTS ============ */
         .control-hints {
             position: absolute;
             bottom: 20px;
@@ -316,7 +315,6 @@
             font-size: 12px;
         }
 
-        /* Target indicator */
         .target-indicator {
             position: absolute;
             pointer-events: none;
@@ -338,7 +336,6 @@
             100% { transform: scale(2); opacity: 0; }
         }
 
-        /* Hide hints in edit mode */
         .app.edit-mode .control-hints { display: none; }
 
         /* ============ MOBILE BOTTOM SHEET ============ */
@@ -363,13 +360,8 @@
             .bottom-sheet { display: flex; flex-direction: column; }
         }
 
-        .bottom-sheet.expanded {
-            transform: translateY(0);
-        }
-
-        .bottom-sheet.peek {
-            transform: translateY(calc(100% - 180px));
-        }
+        .bottom-sheet.expanded { transform: translateY(0); }
+        .bottom-sheet.peek { transform: translateY(calc(100% - 180px)); }
 
         .sheet-handle {
             padding: 12px;
@@ -398,15 +390,9 @@
             padding: 0 4px;
         }
 
-        .sheet-title {
-            font-size: 14px;
-            font-weight: 600;
-        }
+        .sheet-title { font-size: 14px; font-weight: 600; }
 
-        .sheet-actions {
-            display: flex;
-            gap: 8px;
-        }
+        .sheet-actions { display: flex; gap: 8px; }
 
         .sheet-btn {
             min-width: 44px;
@@ -425,7 +411,6 @@
 
         .sheet-btn-primary { background: var(--primary); color: #fff; }
         .sheet-btn-secondary { background: var(--surface-2); color: var(--text); }
-        .sheet-btn-success { background: var(--success); color: #fff; }
 
         .sheet-content {
             flex: 1;
@@ -434,39 +419,34 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Quick controls in collapsed state */
         .quick-controls {
             display: flex;
             gap: 8px;
-            padding: 8px 16px 16px;
+            padding: 8px 16px;
             border-bottom: 1px solid var(--border);
         }
 
         .quick-btn {
             flex: 1;
-            min-height: 50px;
+            min-height: 44px;
             border: none;
-            border-radius: 12px;
-            font-size: 14px;
+            border-radius: 10px;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             background: var(--surface-2);
             color: var(--text);
             transition: all 0.15s;
         }
 
         .quick-btn:active { transform: scale(0.97); }
-        .quick-btn.playing { background: var(--success); }
-        .quick-btn.accent { background: var(--primary); }
 
         /* Mobile sources list */
-        .mobile-sources {
-            padding-top: 12px;
-        }
+        .mobile-sources { padding-top: 12px; }
 
         .mobile-source-item {
             display: flex;
@@ -479,13 +459,8 @@
             min-height: 60px;
         }
 
-        .mobile-source-item.selected {
-            border: 2px solid var(--primary);
-        }
-
-        .mobile-source-item.playing {
-            border: 2px solid var(--success);
-        }
+        .mobile-source-item.selected { border: 2px solid var(--primary); }
+        .mobile-source-item.playing { border: 2px solid var(--success); }
 
         .mobile-source-number {
             width: 32px;
@@ -501,10 +476,7 @@
             flex-shrink: 0;
         }
 
-        .mobile-source-info {
-            flex: 1;
-            min-width: 0;
-        }
+        .mobile-source-info { flex: 1; min-width: 0; }
 
         .mobile-source-name {
             font-size: 14px;
@@ -514,15 +486,9 @@
             text-overflow: ellipsis;
         }
 
-        .mobile-source-meta {
-            font-size: 12px;
-            color: var(--text-dim);
-        }
+        .mobile-source-meta { font-size: 12px; color: var(--text-dim); }
 
-        .mobile-source-actions {
-            display: flex;
-            gap: 8px;
-        }
+        .mobile-source-actions { display: flex; gap: 8px; }
 
         .mobile-source-btn {
             width: 44px;
@@ -542,7 +508,6 @@
         .mobile-source-btn.playing { background: var(--success); color: #fff; }
         .mobile-source-btn.delete:active { background: var(--accent); color: #fff; }
 
-        /* Mobile file drop */
         .mobile-add-section {
             margin-top: 16px;
             padding-top: 16px;
@@ -568,20 +533,15 @@
             background: var(--primary-dim);
         }
 
-        /* Empty state */
         .mobile-empty {
             text-align: center;
             padding: 32px 16px;
             color: var(--text-dim);
         }
 
-        .mobile-empty-icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-            opacity: 0.5;
-        }
+        .mobile-empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
 
-        /* ============ FAB (Floating Action Button) ============ */
+        /* ============ FAB ============ */
         .fab {
             display: none;
             position: fixed;
@@ -781,6 +741,227 @@
             font-size: 9px;
         }
 
+        /* ============ EXPORT SECTION ============ */
+        .export-section {
+            padding: 12px 14px;
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+        }
+
+        .export-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-dim);
+            margin-bottom: 10px;
+        }
+
+        .export-duration-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .export-duration-label {
+            font-size: 11px;
+            color: var(--text-dim);
+            flex-shrink: 0;
+        }
+
+        .export-duration-input {
+            width: 60px;
+            padding: 4px 8px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 12px;
+            text-align: center;
+            user-select: auto;
+            -webkit-user-select: auto;
+        }
+
+        .export-duration-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .export-duration-unit {
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        .export-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .export-btn {
+            flex: 1;
+            padding: 9px 6px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.2s;
+            min-height: 38px;
+            white-space: nowrap;
+        }
+
+        .export-btn-wav {
+            background: linear-gradient(135deg, #1a3a5c, var(--primary));
+            color: #fff;
+        }
+
+        .export-btn-webm {
+            background: linear-gradient(135deg, #2d1b4e, #8b5cf6);
+            color: #fff;
+        }
+
+        .export-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .export-btn:active { transform: scale(0.97) translateY(0); }
+
+        .export-btn:disabled {
+            background: var(--surface-2);
+            color: var(--text-dim);
+            cursor: not-allowed;
+            transform: none;
+            opacity: 1;
+        }
+
+        /* Recording indicator */
+        .export-btn.recording {
+            background: linear-gradient(135deg, #5c1a1a, var(--accent));
+            animation: recordPulse 1.2s ease-in-out infinite;
+        }
+
+        @keyframes recordPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.75; }
+        }
+
+        .export-progress {
+            margin-top: 8px;
+            font-size: 11px;
+            color: var(--text-dim);
+            text-align: center;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .export-progress.visible { display: block; }
+
+        .export-progress-bar {
+            height: 3px;
+            background: var(--surface-2);
+            border-radius: 2px;
+            margin-top: 6px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .export-progress-bar.visible { display: block; }
+
+        .export-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #8b5cf6);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        /* Mobile export section */
+        .mobile-export-section {
+            padding: 10px 16px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mobile-export-duration-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .mobile-export-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .mobile-export-btn {
+            flex: 1;
+            min-height: 46px;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+
+        .mobile-export-btn-wav {
+            background: linear-gradient(135deg, #1a3a5c, var(--primary));
+            color: #fff;
+        }
+
+        .mobile-export-btn-webm {
+            background: linear-gradient(135deg, #2d1b4e, #8b5cf6);
+            color: #fff;
+        }
+
+        .mobile-export-btn:active { transform: scale(0.97); }
+
+        .mobile-export-btn:disabled {
+            background: var(--surface-2);
+            color: var(--text-dim);
+            cursor: not-allowed;
+        }
+
+        .mobile-export-btn.recording {
+            background: linear-gradient(135deg, #5c1a1a, var(--accent));
+            animation: recordPulse 1.2s ease-in-out infinite;
+        }
+
+        .mobile-export-progress {
+            margin-top: 8px;
+            font-size: 11px;
+            color: var(--text-dim);
+            text-align: center;
+            display: none;
+        }
+
+        .mobile-export-progress.visible { display: block; }
+
+        .mobile-export-progress-bar {
+            height: 3px;
+            background: var(--surface-2);
+            border-radius: 2px;
+            margin-top: 6px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .mobile-export-progress-bar.visible { display: block; }
+
+        .mobile-export-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #8b5cf6);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
         /* ============ HELP PANEL ============ */
         .help-panel {
             position: fixed;
@@ -830,9 +1011,7 @@
             padding: 16px;
         }
 
-        .help-section {
-            margin-bottom: 24px;
-        }
+        .help-section { margin-bottom: 24px; }
 
         .help-section h3 {
             font-size: 13px;
@@ -876,7 +1055,7 @@
             margin: 0 2px;
         }
 
-        /* ============ TOAST NOTIFICATION ============ */
+        /* ============ TOAST ============ */
         .toast {
             position: fixed;
             bottom: 100px;
@@ -887,10 +1066,11 @@
             padding: 12px 20px;
             border-radius: 10px;
             font-size: 13px;
-            z-index: 200;
+            z-index: 300;
             opacity: 0;
             transition: all 0.3s ease;
             pointer-events: none;
+            white-space: nowrap;
         }
 
         .toast.show {
@@ -902,7 +1082,7 @@
             .toast { bottom: 200px; }
         }
 
-        /* ============ SCENE INFO BADGE ============ */
+        /* ============ SCENE BADGE ============ */
         .scene-badge {
             position: absolute;
             top: 70px;
@@ -935,7 +1115,7 @@
                 </div>
                 <div class="header-actions">
                     <div class="scene-btns">
-                        <button class="icon-btn" id="helpBtn" title="Pomoc i biblioteki dźwięków">❓</button>
+                        <button class="icon-btn" id="helpBtn" title="Pomoc">❓</button>
                         <button class="icon-btn" id="saveSceneBtn" title="Zapisz scenę">💾</button>
                         <button class="icon-btn" id="loadSceneBtn" title="Wczytaj scenę">📂</button>
                     </div>
@@ -1040,6 +1220,25 @@
                 <kbd>Space</kbd> play/pause
                 <kbd>Ctrl+S</kbd> zapisz
             </div>
+
+            <!-- Desktop Export Section -->
+            <div class="export-section">
+                <div class="export-title">Eksport audio</div>
+                <div class="export-duration-row">
+                    <span class="export-duration-label">Czas:</span>
+                    <input class="export-duration-input" type="number" id="exportDuration" value="60" min="1" max="600">
+                    <span class="export-duration-unit">s</span>
+                    <span class="export-duration-label" style="margin-left:4px; font-size:10px;">(dla loopów)</span>
+                </div>
+                <div class="export-btns">
+                    <button class="export-btn export-btn-wav" id="exportWavBtn" disabled title="Szybki render, bezstratny WAV">⬇ WAV</button>
+                    <button class="export-btn export-btn-webm" id="exportWebmBtn" disabled title="Mały plik, Opus/WebM — real-time">⬇ WebM</button>
+                </div>
+                <div class="export-progress" id="exportProgress"></div>
+                <div class="export-progress-bar" id="exportProgressBar">
+                    <div class="export-progress-fill" id="exportProgressFill"></div>
+                </div>
+            </div>
         </aside>
 
         <!-- Mobile Bottom Sheet -->
@@ -1047,18 +1246,35 @@
             <div class="sheet-handle" id="sheetHandle">
                 <div class="handle-bar"></div>
                 <div class="sheet-header">
-                    <span class="sheet-title">Źródła dźwięku (<span id="mobileSourcesCount">0</span>)</span>
+                    <span class="sheet-title">Źródła (<span id="mobileSourcesCount">0</span>)</span>
                     <div class="sheet-actions">
                         <button class="sheet-btn sheet-btn-secondary" id="mobileStopAllBtn">⏹</button>
                         <button class="sheet-btn sheet-btn-primary" id="mobilePlayAllBtn">▶ All</button>
                     </div>
                 </div>
             </div>
-            
+
             <div class="quick-controls">
-                <button class="quick-btn" id="mobileHelpBtn">❓ Pomoc</button>
-                <button class="quick-btn" id="mobileSaveBtn">💾 Zapisz</button>
-                <button class="quick-btn" id="mobileLoadBtn">📂 Wczytaj</button>
+                <button class="quick-btn" id="mobileHelpBtn">❓</button>
+                <button class="quick-btn" id="mobileSaveBtn">💾</button>
+                <button class="quick-btn" id="mobileLoadBtn">📂</button>
+            </div>
+
+            <!-- Mobile Export Section -->
+            <div class="mobile-export-section">
+                <div class="mobile-export-duration-row">
+                    <span class="export-duration-label">Czas eksportu:</span>
+                    <input class="export-duration-input" type="number" id="mobileExportDuration" value="60" min="1" max="600">
+                    <span class="export-duration-unit">s</span>
+                </div>
+                <div class="mobile-export-btns">
+                    <button class="mobile-export-btn mobile-export-btn-wav" id="mobileExportWavBtn" disabled>⬇ WAV</button>
+                    <button class="mobile-export-btn mobile-export-btn-webm" id="mobileExportWebmBtn" disabled>⬇ WebM</button>
+                </div>
+                <div class="mobile-export-progress" id="mobileExportProgress"></div>
+                <div class="mobile-export-progress-bar" id="mobileExportProgressBar">
+                    <div class="mobile-export-progress-fill" id="mobileExportProgressFill"></div>
+                </div>
             </div>
 
             <div class="sheet-content" id="sheetContent">
@@ -1069,7 +1285,7 @@
                         <div style="font-size: 12px; margin-top: 8px;">Dodaj pliki audio poniżej</div>
                     </div>
                 </div>
-                
+
                 <div class="mobile-add-section">
                     <div class="mobile-file-drop" id="mobileFileDrop">
                         <span style="font-size: 24px;">➕</span>
@@ -1080,7 +1296,7 @@
             </div>
         </div>
 
-        <!-- FAB Button -->
+        <!-- FAB -->
         <button class="fab" id="fab">▶</button>
 
         <!-- Toast -->
@@ -1095,69 +1311,62 @@
             <div class="help-content">
                 <div class="help-section">
                     <h3>🎧 Czym jest dźwięk przestrzenny?</h3>
-                    <p>Dźwięk przestrzenny (spatial audio) to technologia pozwalająca umieszczać źródła dźwięku w trójwymiarowej przestrzeni wokół słuchacza. Dzięki <strong>HRTF</strong> (Head-Related Transfer Function) symulowane jest, jak nasze uszy odbierają dźwięk z różnych kierunków.</p>
+                    <p>Dźwięk przestrzenny (spatial audio) to technologia pozwalająca umieszczać źródła dźwięku w trójwymiarowej przestrzeni wokół słuchacza. Dzięki <strong>HRTF</strong> symulowane jest, jak nasze uszy odbierają dźwięk z różnych kierunków.</p>
                     <p>🎧 <strong>Używaj słuchawek</strong> dla najlepszego efektu!</p>
                 </div>
-
+                <div class="help-section">
+                    <h3>⬇ Eksport — WAV vs WebM</h3>
+                    <p><strong>WAV</strong> — renderuje błyskawicznie (offline), bezstratny, duży plik. Idealne do masteringu.</p>
+                    <p><strong>WebM/Opus</strong> — nagrywa w czasie rzeczywistym, ~15× mniejszy plik. Idealne do udostępniania. Podczas nagrywania słyszysz scenę na żywo.</p>
+                    <p>Pole <strong>Czas</strong> określa długość eksportu — ważne gdy źródła są ustawione na loop.</p>
+                </div>
                 <div class="help-section">
                     <h3>🎵 Skąd wziąć dźwięki?</h3>
-                    <p>Darmowe biblioteki dźwięków (CC0 = bez ograniczeń):</p>
                     <a href="https://freesound.org/browse/tags/cc0/" target="_blank" class="help-link">
-                        🔊 Freesound.org
-                        <span>Ogromna baza dźwięków CC0 i CC-BY</span>
+                        🔊 Freesound.org <span>Ogromna baza dźwięków CC0</span>
                     </a>
                     <a href="https://mixkit.co/free-sound-effects/" target="_blank" class="help-link">
-                        🎬 Mixkit
-                        <span>Darmowe efekty dźwiękowe</span>
+                        🎬 Mixkit <span>Darmowe efekty dźwiękowe</span>
                     </a>
                     <a href="https://pixabay.com/sound-effects/" target="_blank" class="help-link">
-                        🖼️ Pixabay Audio
-                        <span>Dźwięki bez atrybucji</span>
-                    </a>
-                    <a href="https://aporee.org/maps/" target="_blank" class="help-link">
-                        🗺️ Aporee.org
-                        <span>Field recordings z całego świata</span>
+                        🖼️ Pixabay Audio <span>Bez atrybucji</span>
                     </a>
                     <a href="https://sound-effects.bbcrewind.co.uk/" target="_blank" class="help-link">
-                        📻 BBC Sound Effects
-                        <span>Profesjonalne nagrania (do użytku osobistego)</span>
+                        📻 BBC Sound Effects <span>Profesjonalne nagrania</span>
                     </a>
                 </div>
-
                 <div class="help-section">
                     <h3>⌨️ Skróty klawiszowe</h3>
                     <p>
                         <span class="help-kbd">W</span><span class="help-kbd">A</span><span class="help-kbd">S</span><span class="help-kbd">D</span> — Ruch<br>
                         <span class="help-kbd">Q</span><span class="help-kbd">E</span> — Obrót<br>
-                        <span class="help-kbd">Space</span> — Play/Pause wybranego źródła<br>
+                        <span class="help-kbd">Space</span> — Play/Pause<br>
                         <span class="help-kbd">Ctrl</span>+<span class="help-kbd">S</span> — Zapisz scenę
                     </p>
-                </div>
-
-                <div class="help-section">
-                    <h3>💡 Wskazówki</h3>
-                    <p>• W trybie <strong>Edycja</strong> przeciągaj źródła dźwięku po mapie</p>
-                    <p>• W trybie <strong>Eksploracja</strong> chodź po przestrzeni i słuchaj</p>
-                    <p>• Zapisz scenę jako plik JSON, żeby później ją wczytać</p>
-                    <p>• Używaj <strong>loop</strong>ujących dźwięków dla ciągłego tła</p>
-                </div>
-
-                <div class="help-section">
-                    <h3>ℹ️ O projekcie</h3>
-                    <p>Spatial Audio Lab to narzędzie do tworzenia immersyjnych scenografii dźwiękowych.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ============ AUDIO CONTEXT ============
+        // ============ AUDIO CONTEXT + MASTER GAIN ============
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Master gain — wszystkie źródła przez niego przechodzą
+        // Potrzebny do podpięcia MediaRecorder dla eksportu WebM
+        const masterGain = audioCtx.createGain();
+        masterGain.gain.value = 1;
+        masterGain.connect(audioCtx.destination);
+
+        // MediaStream destination — zawsze podpięty, gotowy na nagranie
+        const mediaStreamDest = audioCtx.createMediaStreamDestination();
+        masterGain.connect(mediaStreamDest);
+
         document.addEventListener('click', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
         document.addEventListener('touchstart', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
 
         // ============ STATE ============
-        let compassRotation = 0; // Skumulowany obrót kompasu dla płynnej animacji
+        let compassRotation = 0;
         const state = {
             mode: 'edit',
             sceneName: null,
@@ -1188,7 +1397,6 @@
         const sceneBadge = document.getElementById('sceneBadge');
         const toast = document.getElementById('toast');
 
-        // Desktop elements
         const fileInput = document.getElementById('fileInput');
         const sceneFileInput = document.getElementById('sceneFileInput');
         const fileDrop = document.getElementById('fileDrop');
@@ -1204,7 +1412,6 @@
         const saveSceneBtn = document.getElementById('saveSceneBtn');
         const loadSceneBtn = document.getElementById('loadSceneBtn');
 
-        // Mobile elements
         const bottomSheet = document.getElementById('bottomSheet');
         const sheetHandle = document.getElementById('sheetHandle');
         const sheetContent = document.getElementById('sheetContent');
@@ -1222,11 +1429,28 @@
         const mobileHelpBtn = document.getElementById('mobileHelpBtn');
         const fab = document.getElementById('fab');
 
+        // Export elements
+        const exportWavBtn = document.getElementById('exportWavBtn');
+        const exportWebmBtn = document.getElementById('exportWebmBtn');
+        const exportDuration = document.getElementById('exportDuration');
+        const exportProgress = document.getElementById('exportProgress');
+        const exportProgressBar = document.getElementById('exportProgressBar');
+        const exportProgressFill = document.getElementById('exportProgressFill');
+
+        const mobileExportWavBtn = document.getElementById('mobileExportWavBtn');
+        const mobileExportWebmBtn = document.getElementById('mobileExportWebmBtn');
+        const mobileExportDuration = document.getElementById('mobileExportDuration');
+        const mobileExportProgress = document.getElementById('mobileExportProgress');
+        const mobileExportProgressBar = document.getElementById('mobileExportProgressBar');
+        const mobileExportProgressFill = document.getElementById('mobileExportProgressFill');
+
         // ============ TOAST ============
+        let toastTimer = null;
         function showToast(message, duration = 2500) {
             toast.textContent = message;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), duration);
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), duration);
         }
 
         // ============ CANVAS SETUP ============
@@ -1259,9 +1483,7 @@
         });
 
         // ============ BOTTOM SHEET ============
-        let sheetState = 'collapsed'; // collapsed, peek, expanded
-        let sheetStartY = 0;
-        let sheetStartTransform = 0;
+        let sheetState = 'collapsed';
 
         function setSheetState(newState) {
             sheetState = newState;
@@ -1272,11 +1494,9 @@
 
         sheetHandle.addEventListener('click', () => {
             if (sheetState === 'collapsed') setSheetState('expanded');
-            else if (sheetState === 'expanded') setSheetState('collapsed');
-            else setSheetState('expanded');
+            else setSheetState('collapsed');
         });
 
-        // Touch drag for bottom sheet
         let sheetTouchStartY = 0;
         let sheetTouchMoved = false;
 
@@ -1286,34 +1506,23 @@
         }, { passive: true });
 
         sheetHandle.addEventListener('touchmove', e => {
-            const deltaY = e.touches[0].clientY - sheetTouchStartY;
-            if (Math.abs(deltaY) > 10) sheetTouchMoved = true;
+            if (Math.abs(e.touches[0].clientY - sheetTouchStartY) > 10) sheetTouchMoved = true;
         }, { passive: true });
 
         sheetHandle.addEventListener('touchend', e => {
             if (!sheetTouchMoved) return;
             const deltaY = e.changedTouches[0].clientY - sheetTouchStartY;
-            if (deltaY > 50) {
-                // Swipe down
-                if (sheetState === 'expanded') setSheetState('peek');
-                else setSheetState('collapsed');
-            } else if (deltaY < -50) {
-                // Swipe up
-                setSheetState('expanded');
-            }
+            if (deltaY > 50) setSheetState(sheetState === 'expanded' ? 'peek' : 'collapsed');
+            else if (deltaY < -50) setSheetState('expanded');
         });
 
         // ============ FAB ============
         fab.addEventListener('click', () => {
-            const playingSources = state.sources.filter(s => s.playing);
-            if (playingSources.length > 0) {
+            const anyPlaying = state.sources.some(s => s.playing);
+            if (anyPlaying) {
                 state.sources.forEach(s => stopSource(s));
-                fab.textContent = '▶';
-                fab.classList.remove('playing');
             } else {
                 state.sources.forEach(s => playSource(s));
-                fab.textContent = '⏸';
-                fab.classList.add('playing');
             }
         });
 
@@ -1366,8 +1575,9 @@
                     source.panner.rolloffFactor = 1;
                     updateSourcePanner(source);
 
+                    // Teraz przez masterGain zamiast bezpośrednio do destination
                     source.gain.connect(source.panner);
-                    source.panner.connect(audioCtx.destination);
+                    source.panner.connect(masterGain);
                     source.gain.gain.value = source.volume;
 
                     state.sources.push(source);
@@ -1377,9 +1587,7 @@
                     showToast(`Błąd: ${file.name}`);
                 }
             }
-            if (added > 0) {
-                showToast(`Dodano ${added} ${added === 1 ? 'plik' : 'pliki/plików'}`);
-            }
+            if (added > 0) showToast(`Dodano ${added} ${added === 1 ? 'plik' : 'pliki/plików'}`);
             renderAllSourcesLists();
         }
 
@@ -1415,7 +1623,7 @@
 
             hudPos.textContent = `${state.listener.x.toFixed(1)}, ${state.listener.y.toFixed(1)}`;
             hudRot.textContent = `${Math.round(state.listener.angle)}°`;
-            // Kompas - oblicz najkrótszą ścieżkę rotacji (eliminuje skok 359°→0°)
+
             const targetCompassAngle = -state.listener.angle;
             let delta = targetCompassAngle - compassRotation;
             while (delta > 180) delta -= 360;
@@ -1478,6 +1686,18 @@
             renderMobileSourcesList();
             sourcesCount.textContent = state.sources.length;
             mobileSourcesCount.textContent = state.sources.length;
+            updateExportButtons();
+        }
+
+        function updateExportButtons() {
+            const has = state.sources.length > 0;
+            const isExporting = exportWavBtn.disabled && exportWavBtn.textContent.includes('...');
+            if (!isExporting) {
+                exportWavBtn.disabled = !has;
+                exportWebmBtn.disabled = !has;
+                mobileExportWavBtn.disabled = !has;
+                mobileExportWebmBtn.disabled = !has;
+            }
         }
 
         function renderDesktopSourcesList() {
@@ -1492,7 +1712,7 @@
                         <div class="source-number">${idx + 1}</div>
                         <div class="source-info">
                             <div class="source-name">${src.name}</div>
-                            <div class="source-meta">${dist} m • Vol: ${Math.round(src.volume * 100)}%</div>
+                            <div class="source-meta">${dist} m · Vol: ${Math.round(src.volume * 100)}%</div>
                         </div>
                         <button class="source-btn ${src.playing ? 'playing' : ''}" data-action="toggle">${src.playing ? '⏸' : '▶'}</button>
                         <button class="source-btn delete" data-action="delete">✕</button>
@@ -1524,7 +1744,7 @@
                         <div class="mobile-source-number">${idx + 1}</div>
                         <div class="mobile-source-info">
                             <div class="mobile-source-name">${src.name}</div>
-                            <div class="mobile-source-meta">${dist} m • Vol: ${Math.round(src.volume * 100)}%</div>
+                            <div class="mobile-source-meta">${dist} m · Vol: ${Math.round(src.volume * 100)}%</div>
                         </div>
                         <div class="mobile-source-actions">
                             <button class="mobile-source-btn ${src.playing ? 'playing' : ''}" data-action="toggle">${src.playing ? '⏸' : '▶'}</button>
@@ -1562,7 +1782,6 @@
 
         playAllBtn.addEventListener('click', () => state.sources.forEach(s => playSource(s)));
         stopAllBtn.addEventListener('click', () => { state.sources.forEach(s => stopSource(s)); playBtn.textContent = '▶ Play'; });
-
         mobilePlayAllBtn.addEventListener('click', () => state.sources.forEach(s => playSource(s)));
         mobileStopAllBtn.addEventListener('click', () => state.sources.forEach(s => stopSource(s)));
 
@@ -1575,9 +1794,9 @@
             }
         });
 
-        // ============ SCENE SAVE/LOAD ============
+        // ============ SCENE SAVE / LOAD ============
         function exportScene() {
-            const sceneData = {
+            return {
                 version: 1,
                 name: state.sceneName || `Scena_${new Date().toISOString().slice(0, 10)}`,
                 createdAt: new Date().toISOString(),
@@ -1590,22 +1809,12 @@
                     volume: src.volume
                 }))
             };
-            return sceneData;
         }
 
         function downloadScene() {
             const scene = exportScene();
-            const json = JSON.stringify(scene, null, 2);
-            const blob = new Blob([json], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${scene.name.replace(/[^a-zA-Z0-9_-]/g, '_')}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
+            const blob = new Blob([JSON.stringify(scene, null, 2)], { type: 'application/json' });
+            triggerDownload(blob, `${scene.name.replace(/[^a-zA-Z0-9_-]/g, '_')}.json`);
             state.sceneName = scene.name;
             updateSceneBadge();
             showToast(`Zapisano: ${scene.name}`);
@@ -1613,49 +1822,32 @@
 
         async function loadSceneFromFile(file) {
             try {
-                const text = await file.text();
-                const scene = JSON.parse(text);
-                
-                if (!scene.version || !scene.sources) {
-                    throw new Error('Nieprawidłowy format pliku sceny');
-                }
-
-                // Restore listener position
+                const scene = JSON.parse(await file.text());
+                if (!scene.version || !scene.sources) throw new Error('Nieprawidłowy format');
                 if (scene.listener) {
                     state.listener.x = scene.listener.x || 0;
                     state.listener.y = scene.listener.y || 0;
                     state.listener.angle = scene.listener.angle || 0;
                     updateListener();
                 }
-
-                // Match sources by name and restore positions
                 let matched = 0;
-                for (const savedSource of scene.sources) {
-                    const existingSource = state.sources.find(s => s.name === savedSource.name);
-                    if (existingSource) {
-                        existingSource.x = savedSource.x;
-                        existingSource.y = savedSource.y;
-                        existingSource.volume = savedSource.volume;
-                        existingSource.gain.gain.setValueAtTime(existingSource.volume, audioCtx.currentTime);
-                        updateSourcePanner(existingSource);
+                for (const saved of scene.sources) {
+                    const existing = state.sources.find(s => s.name === saved.name);
+                    if (existing) {
+                        existing.x = saved.x;
+                        existing.y = saved.y;
+                        existing.volume = saved.volume;
+                        existing.gain.gain.setValueAtTime(existing.volume, audioCtx.currentTime);
+                        updateSourcePanner(existing);
                         matched++;
                     }
                 }
-
                 state.sceneName = scene.name;
                 updateSceneBadge();
                 renderAllSourcesLists();
-
-                const totalSaved = scene.sources.length;
-                if (matched === totalSaved) {
-                    showToast(`Wczytano scenę: ${scene.name}`);
-                } else if (matched > 0) {
-                    showToast(`Wczytano ${matched}/${totalSaved} źródeł`);
-                } else {
-                    showToast(`Brak pasujących źródeł (wymagane: ${scene.sources.map(s => s.name).join(', ')})`);
-                }
+                const total = scene.sources.length;
+                showToast(matched === total ? `Wczytano: ${scene.name}` : `Wczytano ${matched}/${total} źródeł`);
             } catch (err) {
-                console.error('Error loading scene:', err);
                 showToast('Błąd wczytywania sceny');
             }
         }
@@ -1669,14 +1861,24 @@
             }
         }
 
-        // Scene buttons
+        function triggerDownload(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 5000);
+        }
+
         saveSceneBtn.addEventListener('click', downloadScene);
         loadSceneBtn.addEventListener('click', () => sceneFileInput.click());
         mobileSaveBtn.addEventListener('click', downloadScene);
+        mobileLoadBtn.addEventListener('click', () => sceneFileInput.click());
         helpBtn.addEventListener('click', () => helpPanel.classList.add('open'));
         helpClose.addEventListener('click', () => helpPanel.classList.remove('open'));
         mobileHelpBtn.addEventListener('click', () => helpPanel.classList.add('open'));
-        mobileLoadBtn.addEventListener('click', () => sceneFileInput.click());
 
         sceneFileInput.addEventListener('change', () => {
             if (sceneFileInput.files.length > 0) {
@@ -1685,7 +1887,6 @@
             }
         });
 
-        // Keyboard shortcut Ctrl+S
         document.addEventListener('keydown', e => {
             if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                 e.preventDefault();
@@ -1707,10 +1908,10 @@
         });
         document.addEventListener('keyup', e => { state.keys[e.code] = false; });
 
-        // ============ MOUSE / TOUCH ============
-        function getCanvasPos(e) {
+        // ============ POINTER HANDLING ============
+        function getCanvasPos(clientX, clientY) {
             const rect = mainCanvas.getBoundingClientRect();
-            return { x: e.clientX - rect.left, y: e.clientY - rect.top, rect };
+            return { x: clientX - rect.left, y: clientY - rect.top, rect };
         }
 
         function screenToWorld(screenX, screenY, rect) {
@@ -1718,7 +1919,6 @@
             const scale = size / (state.worldSize * 2);
             const cx = rect.width / 2;
             const cy = rect.height / 2;
-
             if (state.mode === 'explore') {
                 const rad = state.listener.angle * Math.PI / 180;
                 const sx = (screenX - cx) / scale;
@@ -1727,9 +1927,8 @@
                     x: state.listener.x + sx * Math.cos(rad) - sy * Math.sin(rad),
                     y: state.listener.y + sx * Math.sin(rad) + sy * Math.cos(rad)
                 };
-            } else {
-                return { x: (screenX - cx) / scale, y: (screenY - cy) / scale };
             }
+            return { x: (screenX - cx) / scale, y: (screenY - cy) / scale };
         }
 
         function worldToScreen(worldX, worldY) {
@@ -1738,18 +1937,15 @@
             const scale = size / (state.worldSize * 2);
             const cx = rect.width / 2;
             const cy = rect.height / 2;
-
             if (state.mode === 'explore') {
                 const rad = state.listener.angle * Math.PI / 180;
                 const dx = worldX - state.listener.x;
                 const dy = worldY - state.listener.y;
-                // Macierz rotacji o -rad (zgodna z ctx.rotate(-rad) w draw)
                 const sx = dx * Math.cos(rad) + dy * Math.sin(rad);
                 const sy = -dx * Math.sin(rad) + dy * Math.cos(rad);
                 return { x: cx + sx * scale, y: cy + sy * scale };
-            } else {
-                return { x: cx + worldX * scale, y: cy + worldY * scale };
             }
+            return { x: cx + worldX * scale, y: cy + worldY * scale };
         }
 
         function findSourceAt(wx, wy, threshold = 1.5) {
@@ -1777,16 +1973,11 @@
             pointerDown = true;
             pointerMoved = false;
             pointerStart = { x: clientX, y: clientY };
-
-            const { x, y, rect } = getCanvasPos({ clientX, clientY });
+            const { x, y, rect } = getCanvasPos(clientX, clientY);
             const world = screenToWorld(x, y, rect);
-
             if (state.mode === 'edit') {
                 const src = findSourceAt(world.x, world.y);
-                if (src) {
-                    draggedSource = src;
-                    selectSource(src);
-                }
+                if (src) { draggedSource = src; selectSource(src); }
             } else {
                 state.dragStartAngle = state.listener.angle;
             }
@@ -1794,16 +1985,12 @@
 
         function handlePointerMove(clientX, clientY) {
             if (!pointerDown) return;
-
             const dx = clientX - pointerStart.x;
             const dy = clientY - pointerStart.y;
-
-            if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
-                pointerMoved = true;
-            }
+            if (Math.abs(dx) > 5 || Math.abs(dy) > 5) pointerMoved = true;
 
             if (state.mode === 'edit' && draggedSource) {
-                const { x, y, rect } = getCanvasPos({ clientX, clientY });
+                const { x, y, rect } = getCanvasPos(clientX, clientY);
                 const world = screenToWorld(x, y, rect);
                 const maxDist = state.worldSize - 1;
                 draggedSource.x = Math.max(-maxDist, Math.min(maxDist, world.x));
@@ -1819,7 +2006,7 @@
 
         function handlePointerUp(clientX, clientY) {
             if (state.mode === 'explore' && !pointerMoved && pointerDown) {
-                const { x, y, rect } = getCanvasPos({ clientX, clientY });
+                const { x, y, rect } = getCanvasPos(clientX, clientY);
                 const world = screenToWorld(x, y, rect);
                 const maxDist = state.worldSize - 1;
                 state.target = {
@@ -1831,21 +2018,15 @@
             draggedSource = null;
         }
 
-        // Minimap click
-        const minimap = document.querySelector('.minimap');
-        minimap.addEventListener('click', e => {
+        document.querySelector('.minimap').addEventListener('click', e => {
             if (state.mode !== 'explore') return;
             const rect = minimapCanvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
             const size = rect.width;
             const scale = size / (state.worldSize * 2);
-            const worldX = (x - size / 2) / scale;
-            const worldY = (y - size / 2) / scale;
             const maxDist = state.worldSize - 1;
             state.target = {
-                x: Math.max(-maxDist, Math.min(maxDist, worldX)),
-                y: Math.max(-maxDist, Math.min(maxDist, worldY))
+                x: Math.max(-maxDist, Math.min(maxDist, (e.clientX - rect.left - size / 2) / scale)),
+                y: Math.max(-maxDist, Math.min(maxDist, (e.clientY - rect.top - size / 2) / scale))
             };
         });
 
@@ -1860,12 +2041,12 @@
                 const rad = state.listener.angle * Math.PI / 180;
                 let moveX = 0, moveY = 0;
 
-                if (state.keys['KeyW'] || state.keys['ArrowUp']) { moveX += Math.sin(rad); moveY -= Math.cos(rad); }
-                if (state.keys['KeyS'] || state.keys['ArrowDown']) { moveX -= Math.sin(rad); moveY += Math.cos(rad); }
-                if (state.keys['KeyA']) { moveX -= Math.cos(rad); moveY -= Math.sin(rad); }
-                if (state.keys['KeyD']) { moveX += Math.cos(rad); moveY += Math.sin(rad); }
-                if (state.keys['KeyQ'] || state.keys['ArrowLeft']) { state.listener.angle -= state.rotSpeed * dt; }
-                if (state.keys['KeyE'] || state.keys['ArrowRight']) { state.listener.angle += state.rotSpeed * dt; }
+                if (state.keys['KeyW'] || state.keys['ArrowUp'])    { moveX += Math.sin(rad); moveY -= Math.cos(rad); }
+                if (state.keys['KeyS'] || state.keys['ArrowDown'])   { moveX -= Math.sin(rad); moveY += Math.cos(rad); }
+                if (state.keys['KeyA'])                              { moveX -= Math.cos(rad); moveY -= Math.sin(rad); }
+                if (state.keys['KeyD'])                              { moveX += Math.cos(rad); moveY += Math.sin(rad); }
+                if (state.keys['KeyQ'] || state.keys['ArrowLeft'])   { state.listener.angle -= state.rotSpeed * dt; }
+                if (state.keys['KeyE'] || state.keys['ArrowRight'])  { state.listener.angle += state.rotSpeed * dt; }
 
                 if (moveX !== 0 || moveY !== 0) {
                     state.target = null;
@@ -1891,7 +2072,6 @@
                 state.listener.x = Math.max(-maxDist, Math.min(maxDist, state.listener.x));
                 state.listener.y = Math.max(-maxDist, Math.min(maxDist, state.listener.y));
                 state.listener.angle = ((state.listener.angle % 360) + 360) % 360;
-
                 updateListener();
             }
 
@@ -1935,22 +2115,14 @@
             ctx.strokeStyle = 'rgba(88, 166, 255, 0.06)';
             ctx.lineWidth = 1;
             for (let i = -state.worldSize; i <= state.worldSize; i += 5) {
-                ctx.beginPath();
-                ctx.moveTo(i * scale, -state.worldSize * scale);
-                ctx.lineTo(i * scale, state.worldSize * scale);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(-state.worldSize * scale, i * scale);
-                ctx.lineTo(state.worldSize * scale, i * scale);
-                ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(i * scale, -state.worldSize * scale); ctx.lineTo(i * scale, state.worldSize * scale); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(-state.worldSize * scale, i * scale); ctx.lineTo(state.worldSize * scale, i * scale); ctx.stroke();
             }
 
-            // World boundary
             ctx.strokeStyle = 'rgba(88, 166, 255, 0.2)';
             ctx.lineWidth = 2;
             ctx.strokeRect(-state.worldSize * scale, -state.worldSize * scale, state.worldSize * 2 * scale, state.worldSize * 2 * scale);
 
-            // Target path
             if (state.target && state.mode === 'explore') {
                 ctx.strokeStyle = 'rgba(247, 129, 102, 0.3)';
                 ctx.lineWidth = 2;
@@ -1960,7 +2132,6 @@
                 ctx.lineTo(state.target.x * scale, state.target.y * scale);
                 ctx.stroke();
                 ctx.setLineDash([]);
-
                 ctx.strokeStyle = 'rgba(247, 129, 102, 0.6)';
                 ctx.lineWidth = 2;
                 ctx.beginPath();
@@ -1968,12 +2139,10 @@
                 ctx.stroke();
             }
 
-            // Sources
             state.sources.forEach((src, idx) => {
                 const sx = src.x * scale;
                 const sy = src.y * scale;
 
-                // Sound waves for playing sources
                 if (src.playing) {
                     const gradient = ctx.createRadialGradient(sx, sy, 0, sx, sy, 60);
                     gradient.addColorStop(0, 'rgba(63, 185, 80, 0.4)');
@@ -2004,13 +2173,11 @@
                 }
             });
 
-            // Listener
             const lx = state.listener.x * scale;
             const ly = state.listener.y * scale;
 
             if (state.mode === 'edit') {
                 const lrad = state.listener.angle * Math.PI / 180;
-
                 ctx.fillStyle = 'rgba(88, 166, 255, 0.1)';
                 ctx.beginPath();
                 ctx.moveTo(lx, ly);
@@ -2037,7 +2204,6 @@
 
             ctx.restore();
 
-            // FOV overlay in explore mode
             if (state.mode === 'explore') {
                 ctx.fillStyle = 'rgba(88, 166, 255, 0.03)';
                 ctx.beginPath();
@@ -2049,14 +2215,10 @@
                 ctx.strokeStyle = 'rgba(255,255,255,0.3)';
                 ctx.lineWidth = 2;
                 ctx.beginPath();
-                ctx.moveTo(cx - 15, cy);
-                ctx.lineTo(cx - 5, cy);
-                ctx.moveTo(cx + 5, cy);
-                ctx.lineTo(cx + 15, cy);
-                ctx.moveTo(cx, cy - 15);
-                ctx.lineTo(cx, cy - 5);
-                ctx.moveTo(cx, cy + 5);
-                ctx.lineTo(cx, cy + 15);
+                ctx.moveTo(cx - 15, cy); ctx.lineTo(cx - 5, cy);
+                ctx.moveTo(cx + 5, cy); ctx.lineTo(cx + 15, cy);
+                ctx.moveTo(cx, cy - 15); ctx.lineTo(cx, cy - 5);
+                ctx.moveTo(cx, cy + 5); ctx.lineTo(cx, cy + 15);
                 ctx.stroke();
             }
         }
@@ -2067,29 +2229,19 @@
 
             minimapCtx.fillStyle = '#161b22';
             minimapCtx.fillRect(0, 0, size, size);
-
             minimapCtx.save();
             minimapCtx.translate(size / 2, size / 2);
 
-            // Grid
             minimapCtx.strokeStyle = 'rgba(88, 166, 255, 0.1)';
             minimapCtx.lineWidth = 1;
             for (let i = -state.worldSize; i <= state.worldSize; i += 10) {
-                minimapCtx.beginPath();
-                minimapCtx.moveTo(i * scale, -state.worldSize * scale);
-                minimapCtx.lineTo(i * scale, state.worldSize * scale);
-                minimapCtx.stroke();
-                minimapCtx.beginPath();
-                minimapCtx.moveTo(-state.worldSize * scale, i * scale);
-                minimapCtx.lineTo(state.worldSize * scale, i * scale);
-                minimapCtx.stroke();
+                minimapCtx.beginPath(); minimapCtx.moveTo(i * scale, -state.worldSize * scale); minimapCtx.lineTo(i * scale, state.worldSize * scale); minimapCtx.stroke();
+                minimapCtx.beginPath(); minimapCtx.moveTo(-state.worldSize * scale, i * scale); minimapCtx.lineTo(state.worldSize * scale, i * scale); minimapCtx.stroke();
             }
 
-            // Boundary
             minimapCtx.strokeStyle = 'rgba(88, 166, 255, 0.3)';
             minimapCtx.strokeRect(-state.worldSize * scale, -state.worldSize * scale, state.worldSize * 2 * scale, state.worldSize * 2 * scale);
 
-            // Target
             if (state.target) {
                 minimapCtx.fillStyle = 'rgba(247, 129, 102, 0.5)';
                 minimapCtx.beginPath();
@@ -2097,7 +2249,6 @@
                 minimapCtx.fill();
             }
 
-            // Sources
             state.sources.forEach(src => {
                 minimapCtx.fillStyle = src.playing ? '#3fb950' : '#58a6ff';
                 minimapCtx.beginPath();
@@ -2105,7 +2256,6 @@
                 minimapCtx.fill();
             });
 
-            // Listener
             const lx = state.listener.x * scale;
             const ly = state.listener.y * scale;
             const lrad = state.listener.angle * Math.PI / 180;
@@ -2132,7 +2282,337 @@
             minimapCtx.restore();
         }
 
-        // Start
+        // ============ EXPORT: WAV (OfflineAudioContext) ============
+
+        // Konwersja AudioBuffer → WAV Blob (PCM 16-bit)
+        function audioBufferToWav(buffer) {
+            const numChannels = buffer.numberOfChannels;
+            const sampleRate = buffer.sampleRate;
+            const numSamples = buffer.length;
+            const bytesPerSample = 2; // 16-bit
+            const blockAlign = numChannels * bytesPerSample;
+            const dataSize = numSamples * blockAlign;
+            const ab = new ArrayBuffer(44 + dataSize);
+            const view = new DataView(ab);
+
+            const writeStr = (offset, str) => {
+                for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
+            };
+
+            writeStr(0, 'RIFF');
+            view.setUint32(4, 36 + dataSize, true);
+            writeStr(8, 'WAVE');
+            writeStr(12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);                          // PCM
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * blockAlign, true);    // byte rate
+            view.setUint16(32, blockAlign, true);
+            view.setUint16(34, 16, true);                         // bit depth
+            writeStr(36, 'data');
+            view.setUint32(40, dataSize, true);
+
+            let offset = 44;
+            for (let i = 0; i < numSamples; i++) {
+                for (let ch = 0; ch < numChannels; ch++) {
+                    const s = buffer.getChannelData(ch)[i];
+                    const clamped = Math.max(-1, Math.min(1, s));
+                    view.setInt16(offset, clamped < 0 ? clamped * 0x8000 : clamped * 0x7FFF, true);
+                    offset += 2;
+                }
+            }
+
+            return new Blob([ab], { type: 'audio/wav' });
+        }
+
+        async function exportWav() {
+            if (state.sources.length === 0) return showToast('Brak źródeł do eksportu');
+
+            await audioCtx.resume();
+
+            // Długość: jeśli źródła mają różne długości — użyj wartości z inputu (loop-aware)
+            // Jeśli żadne nie jest loopowane, użyj naturalnej długości
+            const naturalDuration = Math.max(
+                ...state.sources.filter(s => state.buffers[s.id]).map(s => state.buffers[s.id].duration)
+            );
+            const requestedDuration = parseFloat(exportDuration.value) || 60;
+            // Użyj requestedDuration bo użytkownik mógł ustawić loop
+            const duration = requestedDuration;
+
+            setExportUI('wav', true, `Renderowanie ${duration.toFixed(0)}s...`, 0);
+
+            try {
+                const offlineCtx = new OfflineAudioContext(
+                    2,
+                    Math.ceil(duration * audioCtx.sampleRate),
+                    audioCtx.sampleRate
+                );
+
+                // Pozycja słuchacza
+                const rad = state.listener.angle * Math.PI / 180;
+                const ol = offlineCtx.listener;
+                if (ol.positionX) {
+                    ol.positionX.value = state.listener.x;
+                    ol.positionY.value = 0;
+                    ol.positionZ.value = state.listener.y;
+                    ol.forwardX.value = Math.sin(rad);
+                    ol.forwardY.value = 0;
+                    ol.forwardZ.value = -Math.cos(rad);
+                    ol.upX.value = 0; ol.upY.value = 1; ol.upZ.value = 0;
+                } else {
+                    ol.setPosition(state.listener.x, 0, state.listener.y);
+                    ol.setOrientation(Math.sin(rad), 0, -Math.cos(rad), 0, 1, 0);
+                }
+
+                for (const src of state.sources) {
+                    const buf = state.buffers[src.id];
+                    if (!buf) continue;
+
+                    const sourceNode = offlineCtx.createBufferSource();
+                    sourceNode.buffer = buf;
+                    sourceNode.loop = true; // zawsze loopujemy w offline ctx — duration kontroluje długość
+
+                    const panner = offlineCtx.createPanner();
+                    panner.panningModel = 'HRTF';
+                    panner.distanceModel = 'inverse';
+                    panner.refDistance = 1;
+                    panner.maxDistance = 50;
+                    panner.rolloffFactor = 1;
+
+                    if (panner.positionX) {
+                        panner.positionX.value = src.x;
+                        panner.positionY.value = 0;
+                        panner.positionZ.value = src.y;
+                    } else {
+                        panner.setPosition(src.x, 0, src.y);
+                    }
+
+                    const gain = offlineCtx.createGain();
+                    gain.gain.value = src.volume;
+
+                    sourceNode.connect(gain);
+                    gain.connect(panner);
+                    panner.connect(offlineCtx.destination);
+                    sourceNode.start(0);
+                }
+
+                setExportUI('wav', true, 'Renderowanie (może chwilę zająć)...', 30);
+                const renderedBuffer = await offlineCtx.startRendering();
+
+                setExportUI('wav', true, 'Tworzenie pliku WAV...', 85);
+                const wavBlob = audioBufferToWav(renderedBuffer);
+
+                const sceneName = (state.sceneName || 'spatial-scene').replace(/[^a-zA-Z0-9_-]/g, '_');
+                triggerDownload(wavBlob, `${sceneName}_binaural.wav`);
+                showToast(`✓ WAV gotowy (${(wavBlob.size / 1024 / 1024).toFixed(1)} MB)`);
+
+            } catch (err) {
+                console.error('WAV export error:', err);
+                showToast('Błąd eksportu WAV');
+            } finally {
+                setExportUI('wav', false, '', 0);
+            }
+        }
+
+        // ============ EXPORT: WebM / Opus (MediaRecorder — real-time) ============
+
+        let mediaRecorder = null;
+        let recordingTimer = null;
+        let recordingStartTime = 0;
+        let progressInterval = null;
+
+        // Sprawdź jakie formaty obsługuje przeglądarka
+        function getBestMimeType() {
+            const candidates = [
+                'audio/webm;codecs=opus',
+                'audio/webm',
+                'audio/ogg;codecs=opus',
+                'audio/ogg',
+            ];
+            for (const type of candidates) {
+                if (MediaRecorder.isTypeSupported(type)) return type;
+            }
+            return ''; // przeglądarka zdecyduje
+        }
+
+        async function exportWebm() {
+            if (state.sources.length === 0) return showToast('Brak źródeł do eksportu');
+
+            // Zatrzymaj poprzednie nagranie jeśli trwa
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                stopWebmRecording();
+                return;
+            }
+
+            await audioCtx.resume();
+
+            const duration = parseFloat(mobileExportDuration.value) || parseFloat(exportDuration.value) || 60;
+            const mimeType = getBestMimeType();
+
+            if (!window.MediaRecorder) {
+                return showToast('MediaRecorder nie jest wspierany w tej przeglądarce');
+            }
+
+            const chunks = [];
+
+            try {
+                mediaRecorder = new MediaRecorder(mediaStreamDest.stream, {
+                    mimeType: mimeType || undefined
+                });
+            } catch (e) {
+                console.error('MediaRecorder init error:', e);
+                return showToast('Nie można uruchomić nagrywania');
+            }
+
+            mediaRecorder.ondataavailable = e => {
+                if (e.data && e.data.size > 0) chunks.push(e.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                clearInterval(progressInterval);
+                clearTimeout(recordingTimer);
+
+                const finalMime = mimeType || 'audio/webm';
+                const blob = new Blob(chunks, { type: finalMime });
+                const ext = finalMime.includes('ogg') ? 'ogg' : 'webm';
+                const sceneName = (state.sceneName || 'spatial-scene').replace(/[^a-zA-Z0-9_-]/g, '_');
+                triggerDownload(blob, `${sceneName}_binaural.${ext}`);
+
+                showToast(`✓ ${ext.toUpperCase()} gotowy (${(blob.size / 1024).toFixed(0)} KB)`);
+                setExportUI('webm', false, '', 0);
+
+                // Zatrzymaj źródła które uruchomiliśmy na potrzeby nagrania
+                recordingTempSources.forEach(s => stopSource(s));
+                recordingTempSources = [];
+            };
+
+            // Uruchom wszystkie źródła jeśli nie grają — zapamiętaj które były wyłączone
+            let recordingTempSources = [];
+            state.sources.forEach(src => {
+                if (!src.playing) {
+                    playSource(src);
+                    recordingTempSources.push(src);
+                }
+            });
+
+            // Start nagrania
+            mediaRecorder.start(100); // chunk co 100ms
+            recordingStartTime = Date.now();
+
+            setExportUI('webm', true, `Nagrywanie 0 / ${duration.toFixed(0)}s...`, 0, true);
+
+            // Progress co sekundę
+            progressInterval = setInterval(() => {
+                const elapsed = (Date.now() - recordingStartTime) / 1000;
+                const pct = Math.min(100, (elapsed / duration) * 100);
+                setExportUI('webm', true, `Nagrywanie ${elapsed.toFixed(0)} / ${duration.toFixed(0)}s`, pct, true);
+            }, 500);
+
+            // Zatrzymaj po zadanym czasie
+            recordingTimer = setTimeout(() => stopWebmRecording(), duration * 1000);
+        }
+
+        function stopWebmRecording() {
+            if (!mediaRecorder || mediaRecorder.state === 'inactive') return;
+            clearInterval(progressInterval);
+            clearTimeout(recordingTimer);
+            setExportUI('webm', true, 'Finalizowanie...', 99, true);
+            mediaRecorder.stop();
+        }
+
+        // ============ HELPERS — UI stanu eksportu ============
+
+        function setExportUI(type, isActive, message, progressPct, isRecording = false) {
+            // Desktopowe elementy
+            const wavBtn = exportWavBtn;
+            const webmBtn = exportWebmBtn;
+            const progress = exportProgress;
+            const bar = exportProgressBar;
+            const fill = exportProgressFill;
+
+            // Mobilne elementy
+            const mWavBtn = mobileExportWavBtn;
+            const mWebmBtn = mobileExportWebmBtn;
+            const mProgress = mobileExportProgress;
+            const mBar = mobileExportProgressBar;
+            const mFill = mobileExportProgressFill;
+
+            const hasAnySources = state.sources.length > 0;
+
+            if (type === 'wav') {
+                wavBtn.disabled = isActive;
+                mWavBtn.disabled = isActive;
+                webmBtn.disabled = isActive;
+                mWebmBtn.disabled = isActive;
+
+                wavBtn.textContent = isActive ? '⏳ WAV...' : '⬇ WAV';
+                mWavBtn.textContent = isActive ? '⏳ WAV...' : '⬇ WAV';
+            } else {
+                webmBtn.disabled = isActive && !isRecording; // podczas nagrania można kliknąć "Stop"
+                mWebmBtn.disabled = isActive && !isRecording;
+                wavBtn.disabled = isActive;
+                mWavBtn.disabled = isActive;
+
+                if (isRecording && isActive) {
+                    webmBtn.textContent = '⏹ Stop';
+                    mWebmBtn.textContent = '⏹ Stop';
+                    webmBtn.classList.add('recording');
+                    mWebmBtn.classList.add('recording');
+                } else {
+                    webmBtn.textContent = '⬇ WebM';
+                    mWebmBtn.textContent = '⬇ WebM';
+                    webmBtn.classList.remove('recording');
+                    mWebmBtn.classList.remove('recording');
+                }
+            }
+
+            if (isActive && message) {
+                progress.textContent = message;
+                progress.classList.add('visible');
+                mProgress.textContent = message;
+                mProgress.classList.add('visible');
+
+                bar.classList.add('visible');
+                mBar.classList.add('visible');
+                fill.style.width = progressPct + '%';
+                mFill.style.width = progressPct + '%';
+            } else {
+                progress.classList.remove('visible');
+                mProgress.classList.remove('visible');
+                bar.classList.remove('visible');
+                mBar.classList.remove('visible');
+                fill.style.width = '0%';
+                mFill.style.width = '0%';
+
+                // Przywróć stan przycisków
+                wavBtn.disabled = !hasAnySources;
+                mWavBtn.disabled = !hasAnySources;
+                webmBtn.disabled = !hasAnySources;
+                mWebmBtn.disabled = !hasAnySources;
+                wavBtn.textContent = '⬇ WAV';
+                mWavBtn.textContent = '⬇ WAV';
+                webmBtn.textContent = '⬇ WebM';
+                mWebmBtn.textContent = '⬇ WebM';
+                webmBtn.classList.remove('recording');
+                mWebmBtn.classList.remove('recording');
+            }
+        }
+
+        // Synchronizacja pól duration między desktop a mobile
+        exportDuration.addEventListener('input', () => {
+            mobileExportDuration.value = exportDuration.value;
+        });
+        mobileExportDuration.addEventListener('input', () => {
+            exportDuration.value = mobileExportDuration.value;
+        });
+
+        exportWavBtn.addEventListener('click', exportWav);
+        mobileExportWavBtn.addEventListener('click', exportWav);
+        exportWebmBtn.addEventListener('click', exportWebm);
+        mobileExportWebmBtn.addEventListener('click', exportWebm);
+
+        // ============ START ============
         updateListener();
         requestAnimationFrame(gameLoop);
     </script>
